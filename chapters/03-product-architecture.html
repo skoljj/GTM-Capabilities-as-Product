@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 3: Product Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══ MERGED ROOT VARIABLES ═══ */
+:root {
+  --accent: #D0D8EC;
+  --action: #34d399;
+  --action-bg: rgba(52,211,153,0.06);
+  --action-border: rgba(52,211,153,0.20);
+  --agent: #34d399;
+  --api: #60a5fa;
+  --api-bg: rgba(96,165,250,0.06);
+  --api-border: rgba(96,165,250,0.18);
+  --aq: #a78bfa;
+  --aq-accent: rgba(167,139,250,0.10);
+  --aq-bg: rgba(167,139,250,0.05);
+  --aq-border: rgba(167,139,250,0.20);
+  --awareness: #a78bfa;
+  --bg: #0c0e13;
+  --bg2: #111520;
+  --bg3: #161B27;
+  --border: #252a3a;
+  --border-light: #2f3548;
+  --border2: rgba(255,255,255,.09);
+  --commercial: #fb923c;
+  --commercial-bg: rgba(251,146,60,0.10);
+  --commercial-border: rgba(251,146,60,0.25);
+  --commit: #34d399;
+  --cu-tool: #a78bfa;
+  --dim: #4A5068;
+  --done: #60a5fa;
+  --education: #818cf8;
+  --enterprise: #a78bfa;
+  --enterprise-bg: rgba(168,85,247,0.10);
+  --enterprise-border: rgba(168,85,247,0.25);
+  --faint: #2A3040;
+  --figma: #f472b6;
+  --figma-bg: rgba(244,114,182,0.06);
+  --figma-border: rgba(244,114,182,0.22);
+  --flm: #fb923c;
+  --gap: #f87171;
+  --given: #fbbf24;
+  --gong: #34d399;
+  --gray: #828A9E;
+  --grow: #f472b6;
+  --hq: #60a5fa;
+  --hq-accent: rgba(96,165,250,0.10);
+  --hq-bg: rgba(96,165,250,0.05);
+  --hq-border: rgba(96,165,250,0.20);
+  --hr: #f472b6;
+  --impact: #f87171;
+  --mcp: #34d399;
+  --mcp-bg: rgba(52,211,153,0.06);
+  --mcp-border: rgba(52,211,153,0.22);
+  --off: #C8CDD8;
+  --onboard: #fbbf24;
+  --orch: #60a5fa;
+  --orch-bg: rgba(96,165,250,0.06);
+  --orch-border: rgba(96,165,250,0.22);
+  --platform: #a78bfa;
+  --platform-bg: rgba(167,139,250,0.04);
+  --platform-border: rgba(167,139,250,0.16);
+  --plg: #60a5fa;
+  --plg-bg: rgba(59,130,246,0.10);
+  --plg-border: rgba(59,130,246,0.25);
+  --product: #f472b6;
+  --proto: #fbbf24;
+  --rag: #94a3b8;
+  --rag-bg: rgba(148,163,184,0.05);
+  --rag-border: rgba(148,163,184,0.16);
+  --selection: #60a5fa;
+  --sfdc: #60a5fa;
+  --skill: #fb923c;
+  --surface: #13161e;
+  --surface-2: #1a1e2a;
+  --surface-3: #212636;
+  --text: #e4e7ee;
+  --text-dim: #3e465c;
+  --text-mid: #a0a8be;
+  --text-muted: #6b7590;
+  --vault: #f59e0b;
+  --vault-bg: rgba(245,158,11,0.04);
+  --vault-border: rgba(245,158,11,0.18);
+  --white: #EEEFF2;
+}
+
+
+/* ═══ GLOBAL STYLES ═══ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html {
+  background: var(--bg);
+  color: var(--text);
+  scroll-behavior: smooth;
+  scroll-padding-top: 64px;
+}
+body {
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══ STICKY NAV ═══ */
+.global-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 56px;
+  background: rgba(12,14,19,0.82);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.global-nav-mark {
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  letter-spacing: .16em; color: var(--text-dim);
+}
+.global-nav-mark b { color: var(--white, #eee); font-weight: 500; }
+.global-nav-links { display: flex; gap: 4px; }
+.global-nav-links a {
+  font-size: 11px; color: var(--text-dim); text-decoration: none;
+  letter-spacing: .03em; padding: 6px 14px; border-radius: 6px;
+  transition: color .25s, background .25s;
+}
+.global-nav-links a:hover { color: var(--text-mid); background: rgba(255,255,255,0.04); }
+.global-nav-links a.active { color: var(--text); background: rgba(255,255,255,0.06); }
+
+/* ═══ SECTION TRANSITIONS ═══ */
+.section-transition {
+  position: relative; height: 140px;
+  display: flex; align-items: center; justify-content: center;
+}
+.section-transition::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, var(--bg) 0%, rgba(255,255,255,0.012) 50%, var(--bg) 100%);
+}
+.section-transition-inner {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.section-transition-num {
+  font-family: 'IBM Plex Mono', monospace; font-size: 9px;
+  letter-spacing: .3em; text-transform: uppercase; color: var(--text-dim);
+}
+.section-transition-title {
+  font-family: 'Instrument Serif', serif; font-size: 20px;
+  font-weight: 400; color: var(--text-mid); font-style: italic;
+}
+.section-transition-line {
+  width: 1px; height: 24px;
+  background: linear-gradient(to bottom, var(--text-dim), transparent); opacity: 0.4;
+}
+
+/* ═══ GLOBAL REVEAL ═══ */
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+}
+.reveal.vis { opacity: 1; transform: translateY(0); }
+
+/* ═══ GLOBAL FOOTER ═══ */
+.global-footer {
+  padding: 48px 32px; text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.global-footer p {
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+  color: var(--text-dim); letter-spacing: .1em; line-height: 1.8;
+}
+
+/* ═══ PANEL LAYOUT ═══ */
+.section-panel { position: relative; }
+
+/* ═══ UNIVERSAL CENTERING ═══ */
+.section-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* S2-S4: .sN-page wrappers get explicit auto-margin centering */
+.s3-page {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* S2-S4 page wrappers must be full-width */
+.s3-page {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Section transitions also center */
+.section-transition {
+  width: 100%;
+}
+
+/* S3: content padding */
+#panel-3 > .s3-page {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 24px 28px 80px;
+}
+
+@media(max-width:860px) {
+  .global-nav { padding: 0 16px; }
+  .global-nav-links { display: none; }
+}
+
+
+/* ═══════════════════════════════════════════════════ */
+/* SECTION 3 STYLES (prefixed s3-)                   */
+/* ═══════════════════════════════════════════════════ */
+
+.s3-page { width:100%; max-width:1400px; position:relative; }
+
+/* Header */
+.s3-header { text-align:center; margin-bottom:28px; }
+.s3-header-eyebrow { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--text-dim); margin-bottom:4px; }
+.s3-header h1 { font-family:'Instrument Serif',serif; font-size:36px; font-weight:400; margin-bottom:4px; }
+.s3-header .s3-sub { font-size:18px; color:var(--text-muted); font-weight:300; max-width:900px; margin:0 auto; line-height:1.55; }
+
+/* ── Shared ── */
+.s3-card {
+  border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); padding:18px 20px; position:relative;
+}
+.s3-label {
+  font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  font-weight:700; margin-bottom:5px;
+}
+.s3-title { font-size:16px; font-weight:700; margin-bottom:3px; line-height:1.3; }
+.s3-sub-text { font-size:14px; color:var(--text-muted); line-height:1.5; }
+.s3-accent-bar {
+  position:absolute; top:0; left:10px; right:10px; height:2px;
+  border-radius:0 0 2px 2px;
+}
+.s3-left-bar {
+  position:absolute; left:0; top:10px; bottom:10px; width:3px;
+  border-radius:0 3px 3px 0;
+}
+.s3-tag {
+  display:inline-block; padding:3px 8px; border-radius:4px;
+  font-size:10px; font-weight:600; letter-spacing:0.3px;
+}
+.s3-tags { display:flex; gap:4px; flex-wrap:wrap; margin-top:6px; }
+
+/* ── Divider arrows ── */
+.s3-divider {
+  display:flex; justify-content:center; align-items:center;
+  padding:6px 0; gap:8px;
+}
+.s3-divider-line { width:1px; height:14px; background:var(--text-dim); opacity:0.2; }
+.s3-divider-label {
+  font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  font-weight:700; padding:4px 12px; border-radius:4px;
+  background:var(--surface); border:1px solid var(--border);
+  color:var(--text-dim);
+}
+.s3-divider-arrow { font-size:9px; color:var(--text-dim); opacity:0.35; }
+
+/* ═══════════════════════════════════════ */
+/* SECTION 1: DESIGN SYSTEM INHERITANCE   */
+/* ═══════════════════════════════════════ */
+.design-system-row {
+  display:grid;
+  grid-template-columns: 1fr 60px 1fr;
+  gap:0;
+  align-items:center;
+  margin-bottom:12px;
+}
+.ds-card {
+  border-radius:12px; padding:24px 28px;
+  position:relative; overflow:hidden;
+}
+.ds-product {
+  border:1px solid var(--figma-border);
+  background:var(--figma-bg);
+}
+.ds-gtm {
+  border:1px solid var(--action-border);
+  background:var(--action-bg);
+}
+.ds-card .ds-eyebrow {
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  font-weight:700; margin-bottom:6px;
+}
+.ds-card .ds-title { font-size:18px; font-weight:700; margin-bottom:4px; }
+.ds-card .ds-sub { font-size:14px; color:var(--text-muted); line-height:1.5; margin-bottom:12px; }
+.ds-tokens {
+  display:flex; gap:4px; flex-wrap:wrap;
+}
+.ds-token {
+  padding:3px 8px; border-radius:5px;
+  font-size:11px; font-weight:600;
+}
+.ds-token.figma {
+  background:rgba(244,114,182,0.08); border:1px solid rgba(244,114,182,0.18); color:var(--figma);
+}
+.ds-token.action {
+  background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.18); color:var(--action);
+}
+.ds-inherit {
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  color:var(--text-dim);
+}
+.ds-inherit-arrow { font-size:22px; opacity:0.4; }
+.ds-inherit-label {
+  font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
+  font-weight:700; writing-mode:horizontal-tb;
+}
+
+/* Figma MCP callout */
+.figma-mcp-bridge {
+  display:flex; align-items:center; justify-content:center;
+  gap:12px; padding:10px 0; margin-bottom:8px;
+}
+.fmb-line {
+  height:1px; width:60px;
+  background:linear-gradient(to right, transparent, var(--figma), transparent);
+}
+.fmb-chip {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 20px; border-radius:10px;
+  background:var(--figma-bg); border:1px solid var(--figma-border);
+}
+.fmb-icon {
+  width:28px; height:28px; border-radius:6px;
+  background:rgba(244,114,182,0.15); display:flex;
+  align-items:center; justify-content:center;
+  font-size:14px; font-weight:700; color:var(--figma);
+}
+.fmb-text { font-size:16px; font-weight:600; color:var(--figma); }
+.fmb-sub { font-size:14px; color:var(--text-muted); }
+
+/* ═══════════════════════════════════════ */
+/* SECTION 2: AI MODEL APIS               */
+/* ═══════════════════════════════════════ */
+.apis-row {
+  display:flex; flex-direction:column; align-items:center;
+  margin-bottom:8px; width:100%;
+}
+.api-chips {
+  width:100%;
+}
+.api-chips-label {
+  font-size:10px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text-dim); font-weight:700; text-align:center; margin-bottom:12px;
+}
+.api-grid {
+  display:grid; grid-template-columns:repeat(5,1fr); gap:14px; width:100%;
+}
+.api-chip {
+  display:flex; align-items:center; gap:10px;
+  padding:16px 18px; border-radius:10px;
+  background:var(--api-bg); border:1px solid var(--api-border);
+  font-size:16px; font-weight:600; color:var(--api);
+}
+.api-icon {
+  width:28px; height:28px; border-radius:7px;
+  background:rgba(96,165,250,0.12);
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:700;
+}
+
+/* ═══════════════════════════════════════ */
+/* SECTION 3: CORE ENGINE                 */
+/* ═══════════════════════════════════════ */
+.core-row {
+  display:grid;
+  grid-template-columns: 1fr 56px 150px 240px;
+  gap:16px; align-items:center;
+  margin-bottom:8px;
+}
+
+/* RAG */
+.rag {
+  border:1px solid var(--rag-border); background:var(--rag-bg);
+  border-radius:14px; padding:18px; width:100%; box-sizing:border-box;
+}
+.rag-member {
+  padding:12px 14px; border-radius:8px; margin-bottom:0;
+  background:var(--surface); border:1px solid var(--border);
+}
+.rag-member:last-child { margin-bottom:0; }
+.rag-member-name { font-size:14px; font-weight:600; margin-bottom:3px; }
+.rag-chips { display:flex; gap:3px; flex-wrap:wrap; }
+.rag-chip {
+  padding:3px 7px; border-radius:3px; font-size:10px; font-weight:600;
+  background:rgba(148,163,184,0.07); border:1px solid rgba(148,163,184,0.12);
+  color:var(--text-muted);
+}
+
+/* Orchestrator */
+.orch {
+  border:1px solid var(--orch-border); background:var(--orch-bg);
+  border-radius:12px; padding:28px 24px; text-align:center;
+}
+.orch .s3-label { color:var(--orch); }
+.orch .s3-title { font-size:20px; }
+.orch .s3-sub-text { margin-top:6px; text-align:center; }
+.orch-inputs {
+  display:flex; gap:5px; justify-content:center; margin-top:12px; flex-wrap:wrap;
+}
+.orch-input {
+  padding:5px 12px; border-radius:5px; font-size:11px; font-weight:600;
+}
+
+/* Connector */
+.connector {
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:2px;
+}
+.connector-arrows { color:var(--action); font-size:14px; letter-spacing:1px; }
+.connector-label {
+  font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--action); font-weight:700; white-space:nowrap;
+}
+
+/* MCP Node */
+.mcp {
+  width:150px; height:150px; border-radius:50%;
+  border:2px solid var(--mcp-border); background:var(--mcp-bg);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; margin:0 auto;
+}
+.mcp .s3-label { color:var(--mcp); margin-bottom:1px; }
+.mcp .s3-title { font-size:18px; }
+.mcp .s3-sub-text { font-size:12px; }
+
+/* Tools Stack */
+.tools {
+  display:flex; flex-direction:column; gap:5px;
+}
+.tool {
+  padding:12px 14px; border-radius:8px;
+  border:1px solid var(--border); background:var(--surface);
+  position:relative;
+}
+.tool .tool-name { font-size:16px; font-weight:700; padding-left:8px; }
+.tool .tool-desc { font-size:14px; color:var(--text-muted); padding-left:8px; line-height:1.4; }
+.tool.figma-tool {
+  border-color:var(--figma-border);
+  background:var(--figma-bg);
+}
+
+/* ═══════════════════════════════════════ */
+/* SECTION 4: ACMESECURE PLATFORM            */
+/* ═══════════════════════════════════════ */
+.platform {
+  border:1px solid var(--platform-border); background:var(--platform-bg);
+  border-radius:14px; padding:32px 32px;
+}
+.platform-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:18px;
+}
+.platform-title { font-size:22px; font-weight:700; color:var(--platform); }
+.platform-sub { font-size:16px; color:var(--text-muted); line-height:1.5; }
+.platform-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.platform-grid.three-col { grid-template-columns:repeat(3,1fr); }
+.plat-card {
+  padding:20px 22px; border-radius:10px;
+  background:var(--surface); border:1px solid var(--border);
+}
+.plat-card .pc-title { font-size:18px; font-weight:700; margin-bottom:6px; }
+.plat-card .pc-sub { font-size:14px; color:var(--text-muted); line-height:1.55; }
+.plat-card .s3-tags { margin-top:5px; }
+.pc-tag {
+  padding:3px 8px; border-radius:3px; font-size:10px; font-weight:600;
+  background:rgba(167,139,250,0.07); border:1px solid rgba(167,139,250,0.14);
+  color:var(--platform);
+}
+
+/* ═══════════════════════════════════════ */
+/* SECTION 5: ANALYTICS                   */
+/* ═══════════════════════════════════════ */
+.analytics {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:14px;
+  margin-top:14px;
+}
+.analytics-card {
+  padding:20px 20px; border-radius:10px;
+  background:var(--surface); border:1px solid var(--border);
+}
+.analytics-card .ac-title { font-size:16px; font-weight:700; margin-bottom:6px; }
+.analytics-card .ac-sub { font-size:14px; color:var(--text-muted); line-height:1.55; }
+
+/* ── Funnel Hint ── */
+.funnel-hint {
+  position:relative; width:100%; height:80px; margin:0 auto;
+  display:flex; align-items:center; justify-content:center;
+}
+.funnel-hint::before {
+  content:''; position:absolute; top:0; left:5%; right:5%;
+  height:100%;
+  background:linear-gradient(180deg,
+    rgba(148,163,184,0.06) 0%,
+    rgba(96,165,250,0.08) 50%,
+    rgba(148,163,184,0.06) 100%);
+  clip-path:polygon(0 0, 100% 0, 85% 50%, 100% 100%, 0 100%, 15% 50%);
+  pointer-events:none;
+}
+.funnel-hint-label {
+  position:relative; z-index:1;
+  font-family:'IBM Plex Mono',monospace; font-size:9px;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--text-dim); opacity:0.6;
+}
+.funnel-hint-arrows {
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  color:rgba(96,165,250,0.25); font-size:14px;
+}
+
+/* ── Intelligence Pipeline ── */
+.intel-pipeline {
+  width:100%; padding:32px 0; position:relative;
+}
+.intel-pipeline::before {
+  content:''; position:absolute; top:0; bottom:0; left:50%;
+  width:1px; background:linear-gradient(180deg, var(--border) 0%, rgba(167,139,250,0.3) 30%, rgba(167,139,250,0.3) 70%, var(--border) 100%);
+  transform:translateX(-50%); z-index:0;
+}
+.ip-stage {
+  display:grid; grid-template-columns:60px 1fr; gap:0;
+  position:relative; z-index:1; margin-bottom:0;
+}
+.ip-stage-marker {
+  display:flex; flex-direction:column; align-items:center;
+}
+.ip-stage-num {
+  width:40px; height:40px; border-radius:10px;
+  background:var(--bg2); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px;
+}
+.ip-stage-num svg { width:20px; height:20px; stroke:rgba(167,139,250,0.7); stroke-width:1.5; fill:none; }
+.ip-stage-line {
+  flex:1; width:2px;
+  background:linear-gradient(180deg, rgba(167,139,250,0.25), rgba(167,139,250,0.1));
+}
+.ip-stage-content {
+  padding:6px 0 32px 20px;
+}
+.ip-stage-title {
+  font-family:'DM Sans',sans-serif; font-size:20px;
+  font-weight:700; color:var(--white); margin-bottom:8px;
+}
+.ip-stage-desc {
+  font-size:16px; color:var(--gray); line-height:1.65; max-width:900px;
+}
+.ip-flow-arrow {
+  margin:20px 0 0; font-size:16px; color:rgba(167,139,250,0.35);
+  text-align:center;
+}
+.ip-models {
+  display:flex; gap:8px; flex-wrap:wrap; margin-top:16px;
+}
+.ip-connected-row {
+  display:grid; grid-template-columns:1fr auto 200px;
+  gap:0; align-items:stretch; margin-top:16px;
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+}
+.ip-codebase {
+  padding:20px 24px;
+  background:var(--orch-bg); border-right:1px solid var(--orch-border);
+}
+.ip-cb-label {
+  font-size:16px; font-weight:700; color:var(--orch); margin-bottom:10px;
+}
+.ip-cb-tags {
+  display:flex; gap:6px; flex-wrap:wrap;
+}
+.ip-cb-tags span {
+  padding:4px 10px; border-radius:5px; font-size:11px; font-weight:600;
+}
+.ip-mcp-bridge {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:12px 16px; background:var(--mcp-bg);
+  border-right:1px solid var(--mcp-border);
+  gap:4px;
+}
+.ip-mcp-bridge span { font-size:14px; color:var(--mcp); opacity:0.5; }
+.ip-mcp-label {
+  font-family:'IBM Plex Mono',monospace; font-size:14px;
+  font-weight:700; color:var(--mcp);
+}
+.ip-connections {
+  display:flex; flex-direction:column; gap:6px; padding:12px 14px;
+  background:var(--surface);
+}
+.ip-connections .tool { padding:6px 10px; }
+.ip-parallel {
+  display:grid; grid-template-columns:1fr 60px 1fr; gap:0;
+  margin-left:60px; position:relative; z-index:1;
+}
+.ip-parallel-branch {
+  padding:0 20px 24px 0;
+}
+.ip-parallel-branch.right { padding:0 0 24px 20px; }
+.ip-parallel-merge {
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+}
+.ip-parallel-merge-line { width:1px; flex:1; background:rgba(167,139,250,0.15); }
+.ip-parallel-merge-dot {
+  width:10px; height:10px; border-radius:50%;
+  border:2px solid rgba(167,139,250,0.3); background:var(--bg);
+}
+.ip-converge {
+  text-align:center; padding:8px 60px; position:relative; z-index:1;
+}
+.ip-converge-label {
+  font-family:'IBM Plex Mono',monospace; font-size:9px;
+  letter-spacing:.15em; text-transform:uppercase;
+  color:rgba(167,139,250,0.4);
+}
+.ip-bidi {
+  display:flex; align-items:center; gap:16px;
+  margin-top:8px; padding:16px 60px 0;
+}
+.ip-bidi-line { flex:1; height:1px; background:rgba(167,139,250,0.15); }
+.ip-bidi-label {
+  font-family:'IBM Plex Mono',monospace; font-size:10px;
+  letter-spacing:.12em; color:rgba(167,139,250,0.4);
+  white-space:nowrap;
+}
+@keyframes flowPulse{0%,100%{opacity:.2}50%{opacity:.6}}
+
+/* ── Agent Universe ── */
+.agent-universe { width:100%; }
+.au-header { text-align:center; margin-bottom:32px; }
+.au-eyebrow {
+  font-family:'IBM Plex Mono',monospace; font-size:10px;
+  letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--text-dim); margin-bottom:4px;
+}
+.au-title {
+  font-family:'Instrument Serif',serif; font-size:32px;
+  font-weight:400; color:var(--white); margin-bottom:6px;
+}
+.au-sub {
+  font-size:16px; color:var(--text-muted); font-weight:300;
+  max-width:800px; margin:0 auto; line-height:1.55;
+}
+.au-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+}
+.au-district {
+  border:1px solid var(--border); border-radius:14px;
+  background:var(--surface); padding:24px 24px;
+  border-top:2px solid var(--dc, var(--text-dim));
+  position:relative; overflow:hidden;
+}
+.au-district::before {
+  content:''; position:absolute; top:0; right:0; width:120px; height:120px;
+  background:radial-gradient(circle at top right, color-mix(in srgb, var(--dc) 8%, transparent), transparent 70%);
+  pointer-events:none;
+}
+.au-district-header {
+  display:flex; align-items:center; gap:10px;
+  font-size:18px; font-weight:700; color:var(--white);
+  margin-bottom:6px;
+}
+.au-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.au-count {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px; font-weight:400; color:var(--text-dim);
+  letter-spacing:.04em; margin-bottom:16px;
+}
+.au-agents { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.au-agent {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:8px;
+  background:var(--bg2); border:1px solid var(--border);
+  transition:border-color .3s, transform .2s;
+  cursor:default;
+}
+.au-agent:hover {
+  border-color:color-mix(in srgb, var(--dc) 40%, transparent);
+  transform:translateY(-1px);
+}
+.au-agent-icon {
+  width:32px; height:32px; border-radius:8px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px;
+  background:color-mix(in srgb, var(--dc) 10%, transparent);
+  border:1px solid color-mix(in srgb, var(--dc) 20%, transparent);
+  position:relative;
+}
+.au-agent-icon::after {
+  content:''; position:absolute; top:38%; left:20%; right:20%; height:2px;
+  background:var(--dc); opacity:0.5; border-radius:1px;
+}
+.au-agent-info { display:flex; flex-direction:column; gap:1px; min-width:0; }
+.au-agent-name {
+  font-size:13px; font-weight:600; color:var(--text);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.au-agent-role {
+  font-size:10px; color:var(--text-dim);
+  font-family:'IBM Plex Mono',monospace; letter-spacing:.02em;
+}
+
+/* ── Quotient Gutter Bars (absolute, JS-positioned) ── */
+.q-gutter {
+  position:absolute; width:3px; border-radius:2px; pointer-events:none; z-index:10;
+}
+.q-gutter-label {
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%) rotate(-90deg);
+  font-family:'IBM Plex Mono',monospace; font-size:9px;
+  letter-spacing:.18em; text-transform:uppercase;
+  white-space:nowrap; pointer-events:none;
+}
+#hi-gutter {
+  left:-20px;
+  background:linear-gradient(180deg, transparent 2%, rgba(167,139,250,0.18) 10%, rgba(167,139,250,0.30) 50%, rgba(167,139,250,0.18) 90%, transparent 98%);
+}
+#hi-gutter .q-gutter-label { color:rgba(167,139,250,0.5); }
+#ai-gutter {
+  right:-20px;
+  background:linear-gradient(180deg, transparent 2%, rgba(167,139,250,0.18) 10%, rgba(167,139,250,0.30) 50%, rgba(167,139,250,0.18) 90%, transparent 98%);
+}
+#ai-gutter .q-gutter-label { color:rgba(167,139,250,0.5); }
+
+/* Footer */
+.s3-footer {
+  margin-top:36px; text-align:center;
+  font-size:11px; color:var(--text-dim); letter-spacing:0.5px;
+}
+/* ═══ HAMBURGER + OVERLAY ═══ */
+.hamburger { display:flex; flex-direction:column; gap:4px; cursor:pointer; padding:8px; margin-left:-8px; margin-right:12px; z-index:301; position:relative; background:none; border:none; }
+.hamburger span { display:block; width:18px; height:1.5px; background:var(--text-dim); transition:all 0.3s cubic-bezier(0.22,1,0.36,1); }
+.hamburger:hover span { background:var(--text-mid); }
+.hamburger.open span:nth-child(1) { transform:rotate(45deg) translate(4px,4px); }
+.hamburger.open span:nth-child(2) { opacity:0; }
+.hamburger.open span:nth-child(3) { transform:rotate(-45deg) translate(4px,-4px); }
+.chapter-overlay { position:fixed; inset:0; z-index:250; background:rgba(12,14,19,0.96); backdrop-filter:blur(24px) saturate(1.4); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:80px 28px 40px; opacity:0; pointer-events:none; transition:opacity 0.35s cubic-bezier(0.22,1,0.36,1); overflow-y:auto; }
+.chapter-overlay.open { opacity:1; pointer-events:all; }
+.co-title { font-family:'Instrument Serif',serif; font-size:28px; font-weight:400; color:var(--white,#EEEFF2); margin-bottom:32px; font-style:italic; }
+.ch-list { display:flex; flex-direction:column; gap:12px; width:100%; max-width:600px; }
+.ch-link { display:grid; grid-template-columns:48px 1fr auto; align-items:center; gap:20px; padding:20px 24px; border:1px solid var(--border,#252a3a); border-radius:12px; background:var(--surface,#13161e); text-decoration:none; transition:border-color 0.3s,transform 0.25s,box-shadow 0.3s; }
+.ch-link:hover { border-color:rgba(255,255,255,0.09); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+.ch-link.current { border-color:rgba(52,211,153,0.25); background:rgba(52,211,153,0.04); }
+.ch-num { font-family:'Instrument Serif',serif; font-size:28px; font-weight:400; line-height:1; opacity:0.35; }
+.ch-link:nth-child(1) .ch-num { color:#a78bfa; } .ch-link:nth-child(2) .ch-num { color:#D0D8EC; } .ch-link:nth-child(3) .ch-num { color:#f59e0b; } .ch-link:nth-child(4) .ch-num { color:#f472b6; } .ch-link:nth-child(5) .ch-num { color:#60a5fa; } .ch-link:nth-child(6) .ch-num { color:#34d399; } .ch-link:nth-child(7) .ch-num { color:#a78bfa; }
+.ch-info { display:flex; flex-direction:column; gap:2px; }
+.ch-label { font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-dim,#3e465c); }
+.ch-ttl { font-size:15px; font-weight:600; color:var(--white,#EEEFF2); }
+.ch-arrow { font-size:16px; color:var(--text-dim,#3e465c); transition:color 0.3s,transform 0.3s; }
+.ch-link:hover .ch-arrow { color:var(--text-mid); transform:translateX(4px); }
+.ch-link.current .ch-arrow { color:#34d399; }
+</style>
+</head>
+<body>
+
+<nav class="global-nav">
+  <div style="display:flex;align-items:center">
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="global-nav-mark"><b>HI</b><sup style="font-size:8px;color:var(--dim,#4A5068)">AI</sup> = <b>V</b></div>
+  </div>
+  <div class="global-nav-links">
+    <a href="01-framework.html">Framework</a>
+    <a href="02-knowledge-vault.html">Knowledge Vault</a>
+    <a href="03-product-architecture.html" class="active">Architecture</a>
+    <a href="04-bowtie-funnel.html">Bowtie</a>
+    <a href="05-opportunity-seeker.html">Opportunity</a>
+    <a href="06-action-layer.html">Action Layer</a>
+  </div>
+</nav>
+<div class="chapter-overlay" id="chapterOverlay">
+  <div class="co-title">Chapters</div>
+  <div class="ch-list">
+    <a href="../product_design_concept1.html" class="ch-link"><div class="ch-num">◆</div><div class="ch-info"><div class="ch-label">Chapter Zero</div><div class="ch-ttl">Immersive Diagram</div></div><div class="ch-arrow">→</div></a>
+    <a href="01-framework.html" class="ch-link"><div class="ch-num">I</div><div class="ch-info"><div class="ch-label">Chapter One</div><div class="ch-ttl">The Framework</div></div><div class="ch-arrow">→</div></a>
+    <a href="02-knowledge-vault.html" class="ch-link"><div class="ch-num">II</div><div class="ch-info"><div class="ch-label">Chapter Two</div><div class="ch-ttl">The Knowledge Vault</div></div><div class="ch-arrow">→</div></a>
+    <a href="03-product-architecture.html" class="ch-link current"><div class="ch-num">III</div><div class="ch-info"><div class="ch-label">Chapter Three</div><div class="ch-ttl">Product Architecture</div></div><div class="ch-arrow">→</div></a>
+    <a href="04-bowtie-funnel.html" class="ch-link"><div class="ch-num">IV</div><div class="ch-info"><div class="ch-label">Chapter Four</div><div class="ch-ttl">The Bowtie Funnel</div></div><div class="ch-arrow">→</div></a>
+    <a href="05-opportunity-seeker.html" class="ch-link"><div class="ch-num">V</div><div class="ch-info"><div class="ch-label">Chapter Five</div><div class="ch-ttl">Opportunity Seeker</div></div><div class="ch-arrow">→</div></a>
+    <a href="06-action-layer.html" class="ch-link"><div class="ch-num">VI</div><div class="ch-info"><div class="ch-label">Chapter Six</div><div class="ch-ttl">The Action Layer</div></div><div class="ch-arrow">→</div></a>
+  </div>
+</div>
+<div style="height:56px"></div>
+
+<div class="section-panel" id="panel-3">
+<div class="s3-page">
+
+  <div class="s3-header">
+    <div class="s3-header-eyebrow">GTM Performance & Productivity</div>
+    <h1>Product Architecture</h1>
+    <div class="s3-sub">How the GTM Product org builds, delivers, and measures capabilities. From AcmeSecure's product design system through AI orchestration to the field's primary workspace.</div>
+  </div>
+
+  <!-- ═══ ACMESECURE GTM CAPABILITIES ═══ -->
+  <div id="hi-start" class="platform" style="margin-bottom:20px">
+    <div class="platform-header">
+      <div>
+        <div class="platform-title">AcmeSecure GTM Capabilities as a Product</div>
+        <div class="platform-sub">Where capabilities are delivered, consumed, and measured: the field's primary workspace. Built on AcmeSecure's product design system.</div>
+      </div>
+    </div>
+    <div class="platform-grid">
+      <div class="plat-card" style="background:var(--action-bg); border-color:var(--action-border);">
+        <div class="pc-title">GTM Capability Surfaces</div>
+        <div class="pc-sub">Dashboards, playbooks, coaching tools, and inspection views built on the same design system. Visually native to AcmeSecure, purpose-built for the field.</div>
+        <div class="s3-tags">
+          <span class="ds-token action">FLM Dashboards</span><span class="ds-token action">Coaching Briefs</span><span class="ds-token action">Pipeline Views</span><span class="ds-token action">Playbooks</span><span class="ds-token action">Scorecards</span><span class="ds-token action">Ramp Trackers</span>
+        </div>
+      </div>
+      <div class="plat-card" style="background:var(--figma-bg); border-color:var(--figma-border);">
+        <div class="pc-title">Product Design System</div>
+        <div class="pc-sub">Existing Figma component library, design tokens, variables, and layout patterns maintained by AcmeSecure's product design org. The source of truth.</div>
+        <div class="s3-tags">
+          <span class="ds-token figma">Components</span><span class="ds-token figma">Variables</span><span class="ds-token figma">Tokens</span><span class="ds-token figma">Layouts</span><span class="ds-token figma">Typography</span><span class="ds-token figma">Color System</span>
+        </div>
+      </div>
+      <div class="plat-card">
+        <div class="pc-title">Instance / Interface</div>
+        <div class="pc-sub">User-facing surfaces where reps and FLMs interact with capabilities. Dashboards, views, and automations built from inherited design tokens.</div>
+        <div class="s3-tags">
+          <span class="s3-tag pc-tag">Dashboards</span><span class="s3-tag pc-tag">Views</span><span class="s3-tag pc-tag">Automations</span><span class="s3-tag pc-tag">Docs</span>
+        </div>
+      </div>
+      <div class="plat-card">
+        <div class="pc-title">AcmeSecure Task Management</div>
+        <div class="pc-sub">Structured work: coaching tasks, ramp milestones, capability launch tracking, FLM action items, sprint cadences.</div>
+        <div class="s3-tags">
+          <span class="s3-tag pc-tag">Tasks</span><span class="s3-tag pc-tag">Goals</span><span class="s3-tag pc-tag">Sprints</span><span class="s3-tag pc-tag">Custom Fields</span>
+        </div>
+      </div>
+      <div class="plat-card">
+        <div class="pc-title">Media Library</div>
+        <div class="pc-sub">Short-form video, playbooks, podcast content, certification materials. Omnichannel content hub with consumption tracking.</div>
+        <div class="s3-tags">
+          <span class="s3-tag pc-tag">Video</span><span class="s3-tag pc-tag">Playbooks</span><span class="s3-tag pc-tag">Podcasts</span><span class="s3-tag pc-tag">Guides</span>
+        </div>
+      </div>
+      <div class="plat-card">
+        <div class="pc-title">AcmeSecure Agents</div>
+        <div class="pc-sub">Native AI agents embedded in the workspace: coaching nudges, deal guidance, onboarding orchestration, content surfacing. The "Do" layer.</div>
+        <div class="s3-tags">
+          <span class="s3-tag pc-tag">Coaching</span><span class="s3-tag pc-tag">Prospecting</span><span class="s3-tag pc-tag">Deal Intel</span><span class="s3-tag pc-tag">Pipe-Gen</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RAG KNOWLEDGE VAULT (companion) ═══ -->
+  <div id="ai-start" class="rag" style="margin-bottom:20px; padding:32px 32px; border-radius:14px;">
+    <div style="display:flex; align-items:baseline; gap:16px; margin-bottom:16px;">
+      <div class="s3-label" style="color:var(--rag); margin-bottom:0;">Knowledge Layer</div>
+    </div>
+    <div class="s3-title" style="font-size:18px; margin-bottom:4px;">RAG Knowledge Vault</div>
+    <div class="s3-sub-text" style="font-size:14px; margin-bottom:16px;">Personalized Lived Experience. Provenance retrieval per GTM member</div>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px;">
+      <div class="rag-member">
+        <div class="rag-member-name">GTM member a</div>
+        <div class="rag-chips">
+          <span class="rag-chip">Actions</span><span class="rag-chip">Decisions</span><span class="rag-chip">Authored</span><span class="rag-chip">Consumed</span>
+        </div>
+      </div>
+      <div class="rag-member">
+        <div class="rag-member-name">GTM member b</div>
+        <div class="rag-chips">
+          <span class="rag-chip">Actions</span><span class="rag-chip">Decisions</span><span class="rag-chip">Authored</span><span class="rag-chip">Consumed</span>
+        </div>
+      </div>
+      <div class="rag-member">
+        <div class="rag-member-name">GTM member c</div>
+        <div class="rag-chips">
+          <span class="rag-chip">Actions</span><span class="rag-chip">Decisions</span><span class="rag-chip">Authored</span><span class="rag-chip">Consumed</span>
+        </div>
+      </div>
+      <div class="rag-member">
+        <div class="rag-member-name">GTM member ...n</div>
+        <div class="rag-chips">
+          <span class="rag-chip">Actions</span><span class="rag-chip">Decisions</span><span class="rag-chip">Authored</span><span class="rag-chip">Consumed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ANALYTICS ═══ -->
+  <div class="analytics" style="margin-bottom:20px">
+    <div class="analytics-card">
+      <div class="ac-title">Consumption Data</div>
+      <div class="ac-sub">Time series tracking of content views, playbook opens, video completions across segments.</div>
+    </div>
+    <div class="analytics-card">
+      <div class="ac-title">Activity Tracking</div>
+      <div class="ac-sub">Agent interactions, coaching brief opens, dashboard usage, capability adoption rates per FLM.</div>
+    </div>
+    <div class="analytics-card">
+      <div class="ac-title">Behavior Attribution</div>
+      <div class="ac-sub">Connecting capability adoption to Gong call patterns, MEDDPIC usage, pipeline changes.</div>
+    </div>
+    <div class="analytics-card">
+      <div class="ac-title">Outcome Measurement</div>
+      <div class="ac-sub">Ramp time, win rate, attainment, retention. The lagging indicators the action layer is built to move.</div>
+    </div>
+  </div>
+
+  <!-- ═══ INTELLIGENCE PIPELINE ═══ -->
+  <div id="hi-end" class="intel-pipeline">
+
+    <!-- STAGE 1: Distill (linear) -->
+    <div class="ip-stage">
+      <div class="ip-stage-marker">
+        <div class="ip-stage-num"><svg viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg></div>
+        <div class="ip-stage-line"></div>
+      </div>
+      <div class="ip-stage-content">
+        <div class="ip-stage-title">01 · Distill & Organize</div>
+        <div class="ip-stage-desc">Raw human activity (calls, deals, decisions, content authored, content consumed) is captured, structured, and indexed. The knowledge vault transforms lived experience into retrievable provenance.</div>
+      </div>
+    </div>
+
+    <!-- STAGES 2+3: Parallel split -->
+    <div class="ip-converge"><div class="ip-converge-label">↙ parallel enrichment ↘</div></div>
+
+    <div class="ip-parallel">
+      <!-- LEFT: Enrich via MCP -->
+      <div class="ip-parallel-branch">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div class="ip-stage-num"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+          <div class="ip-stage-title" style="margin-bottom:0">02 · Enrich via MCP</div>
+        </div>
+        <div class="ip-stage-desc">Live data from external systems enriches structured knowledge through MCP servers. Each connection adds context: pipeline state, call intelligence, task progress, design tokens.</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:14px">
+          <div class="tool"><div class="s3-left-bar" style="background:var(--sfdc)"></div><div class="tool-name" style="color:var(--sfdc)">SFDC</div><div class="tool-desc">CRM Data · Pipeline · Deals</div></div>
+          <div class="tool"><div class="s3-left-bar" style="background:var(--gong)"></div><div class="tool-name" style="color:var(--gong)">Gong</div><div class="tool-desc">Call Intelligence · Transcripts</div></div>
+          <div class="tool"><div class="s3-left-bar" style="background:var(--cu-tool)"></div><div class="tool-name" style="color:var(--cu-tool)">AcmeSecure</div><div class="tool-desc">Tasks · Workflows · Docs</div></div>
+          <div class="tool figma-tool"><div class="s3-left-bar" style="background:var(--figma)"></div><div class="tool-name" style="color:var(--figma)">Figma</div><div class="tool-desc">Design System · Components</div></div>
+          <div class="tool" style="border-style:dashed;opacity:0.4"><div class="tool-name" style="color:var(--text-dim);font-size:12px">+ Add MCP Server</div></div>
+        </div>
+      </div>
+
+      <!-- CENTER: Merge spine -->
+      <div class="ip-parallel-merge">
+        <div class="ip-parallel-merge-line"></div>
+        <div class="ip-parallel-merge-dot"></div>
+        <div class="ip-parallel-merge-line"></div>
+      </div>
+
+      <!-- RIGHT: Token-Optimize -->
+      <div class="ip-parallel-branch right">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div class="ip-stage-num"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 12h4M9 15h6"/></svg></div>
+          <div class="ip-stage-title" style="margin-bottom:0">03 · Token-Optimize for AI</div>
+        </div>
+        <div class="ip-stage-desc">Enriched data is compressed into token-efficient formats: skill definitions, provenance summaries, design context. Ready for consumption by any model in the API layer.</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px">
+          <div class="api-chip"><div class="api-icon">A</div>Anthropic (Claude)</div>
+          <div class="api-chip"><div class="api-icon">G</div>OpenAI (GPT)</div>
+          <div class="api-chip"><div class="api-icon">G</div>Gemini Pro 1.5</div>
+          <div class="api-chip"><div class="api-icon">X</div>Grok</div>
+          <div class="api-chip"><div class="api-icon">P</div>Perplexity</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ip-converge"><div class="ip-converge-label">↘ converge into codebase ↙</div></div>
+
+    <!-- STAGE 4: Route & Action Through Codebase -->
+    <div class="ip-stage">
+      <div class="ip-stage-marker">
+        <div class="ip-stage-num"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="ip-stage-line"></div>
+      </div>
+      <div class="ip-stage-content">
+        <div class="ip-stage-title">04 · Route & Action Through Codebase</div>
+        <div class="ip-stage-desc">The GTM Product Codebase orchestrates every query: applying skill definitions, selecting the right model, and triggering actions across the stack. Every interaction is logged, versioned, and available for the next cycle.</div>
+        <div class="ip-connected-row" style="grid-template-columns:1fr;margin-top:16px;">
+          <div class="ip-codebase" style="border-radius:12px;">
+            <div class="ip-cb-label">GTM Product Codebase</div>
+            <div class="ip-cb-tags">
+              <span style="background:rgba(96,165,250,0.10); border:1px solid rgba(96,165,250,0.2); color:var(--orch);">Skill Definition</span>
+              <span style="background:var(--figma-bg); border:1px solid var(--figma-border); color:var(--figma);">Figma Context</span>
+              <span style="background:var(--rag-bg); border:1px solid var(--rag-border); color:var(--rag);">Provenance</span>
+              <span style="background:var(--mcp-bg); border:1px solid var(--mcp-border); color:var(--mcp);">MCP Protocol</span>
+              <span style="background:var(--api-bg); border:1px solid var(--api-border); color:var(--api);">AI Model APIs</span>
+            </div>
+          </div>
+        </div>
+        <div class="ip-flow-arrow">▼</div>
+      </div>
+    </div>
+
+    <!-- STAGE 5: Agent Universe -->
+    <div class="ip-stage">
+      <div class="ip-stage-marker">
+        <div class="ip-stage-num"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div class="ip-stage-line" style="background:transparent"></div>
+      </div>
+      <div class="ip-stage-content">
+        <div class="ip-stage-title">05 · 10x Leveraged Activity: The Agent Universe</div>
+        <div class="ip-stage-desc">60+ agents execute at scale across 6 districts. Each operates with full context of the human it serves, the system it connects to, and the outcome it targets. Coaching intelligence, deal strategy, pipeline generation, expansion plays.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ AGENT UNIVERSE (between 05 and 06) ═══ -->
+  <div class="agent-universe" style="margin-top:0;margin-bottom:24px">
+    <div class="au-grid">
+
+      <!-- COMMERCIAL -->
+      <div class="au-district" style="--dc:#00e5ff">
+        <div class="au-district-header"><span class="au-dot" style="background:#00e5ff"></span>Commercial</div>
+        <div class="au-count">17 FLMs · 103 ICs · AMER / EMEA / APAC</div>
+        <div class="au-agents">
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#00e5ff">🎯</div><div class="au-agent-info"><div class="au-agent-name">SCOUT</div><div class="au-agent-role">Prospecting Copilot</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#00e5ff">🧠</div><div class="au-agent-info"><div class="au-agent-name">ANALYST</div><div class="au-agent-role">Coaching Intelligence</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#00e5ff">⚔️</div><div class="au-agent-info"><div class="au-agent-name">STRATEGIST</div><div class="au-agent-role">Deal Strategy Assist</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#00e5ff">🔍</div><div class="au-agent-info"><div class="au-agent-name">ENFORCER</div><div class="au-agent-role">MEDDPIC Compliance</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#00e5ff">⏱️</div><div class="au-agent-info"><div class="au-agent-name">SENTINEL</div><div class="au-agent-role">Stall Detection</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#00e5ff">🗡️</div><div class="au-agent-info"><div class="au-agent-name">RIVAL</div><div class="au-agent-role">Competitive Intel</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#00e5ff">📊</div><div class="au-agent-info"><div class="au-agent-name">FORECASTER</div><div class="au-agent-role">Pipeline Predictor</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#00e5ff">💬</div><div class="au-agent-info"><div class="au-agent-name">ADVISOR</div><div class="au-agent-role">Call Prep Brief</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#00e5ff">📋</div><div class="au-agent-info"><div class="au-agent-name">INSPECTOR</div><div class="au-agent-role">FLM Deal Review</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#00e5ff">🔄</div><div class="au-agent-info"><div class="au-agent-name">BUILDER</div><div class="au-agent-role">Pipe-Gen Engine</div></div></div>
+        </div>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="au-district" style="--dc:#818cf8">
+        <div class="au-district-header"><span class="au-dot" style="background:#818cf8"></span>Enterprise</div>
+        <div class="au-count">9 FLMs · 45 ICs · WEST / EAST</div>
+        <div class="au-agents">
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#818cf8">🏛️</div><div class="au-agent-info"><div class="au-agent-name">ARCHITECT</div><div class="au-agent-role">Deal Strategy Assist</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#818cf8">📄</div><div class="au-agent-info"><div class="au-agent-name">COMPOSER</div><div class="au-agent-role">Proposal Generator</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#818cf8">⚖️</div><div class="au-agent-info"><div class="au-agent-name">COUNSEL</div><div class="au-agent-role">Legal Accelerator</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#818cf8">🕸️</div><div class="au-agent-info"><div class="au-agent-name">WEAVER</div><div class="au-agent-role">Multi-Thread Mapper</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#818cf8">👤</div><div class="au-agent-info"><div class="au-agent-name">FINDER</div><div class="au-agent-role">EB Identification</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#818cf8">🔍</div><div class="au-agent-info"><div class="au-agent-name">ENFORCER</div><div class="au-agent-role">MEDDPIC Compliance</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#818cf8">🛡️</div><div class="au-agent-info"><div class="au-agent-name">GUARDIAN</div><div class="au-agent-role">Security Q Pre-fill</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#818cf8">📐</div><div class="au-agent-info"><div class="au-agent-name">PLANNER</div><div class="au-agent-role">Account Strategy</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#818cf8">🧭</div><div class="au-agent-info"><div class="au-agent-name">NAVIGATOR</div><div class="au-agent-role">Org Chart Intel</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#818cf8">💎</div><div class="au-agent-info"><div class="au-agent-name">QUALIFIER</div><div class="au-agent-role">Enterprise Fit Score</div></div></div>
+        </div>
+      </div>
+
+      <!-- PARTNERSHIPS -->
+      <div class="au-district" style="--dc:#c77dff">
+        <div class="au-district-header"><span class="au-dot" style="background:#c77dff"></span>Partnerships</div>
+        <div class="au-count">3 FLMs · 18 ICs · Alliances</div>
+        <div class="au-agents">
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#c77dff">🤝</div><div class="au-agent-info"><div class="au-agent-name">DIPLOMAT</div><div class="au-agent-role">Partner Intel Agent</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#c77dff">🔗</div><div class="au-agent-info"><div class="au-agent-name">BROKER</div><div class="au-agent-role">Co-Sell Orchestrator</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#c77dff">🗺️</div><div class="au-agent-info"><div class="au-agent-name">CARTOGRAPHER</div><div class="au-agent-role">Ecosystem Mapper</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#c77dff">📡</div><div class="au-agent-info"><div class="au-agent-name">RELAY</div><div class="au-agent-role">Partner Enablement</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#c77dff">📈</div><div class="au-agent-info"><div class="au-agent-name">TRACKER</div><div class="au-agent-role">Joint Pipeline Monitor</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#c77dff">🎪</div><div class="au-agent-info"><div class="au-agent-name">EMCEE</div><div class="au-agent-role">Event Co-Marketing</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#c77dff">📋</div><div class="au-agent-info"><div class="au-agent-name">AUDITOR</div><div class="au-agent-role">Cert Compliance</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#c77dff">🏷️</div><div class="au-agent-info"><div class="au-agent-name">MATCHER</div><div class="au-agent-role">Deal Registration</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#c77dff">📊</div><div class="au-agent-info"><div class="au-agent-name">REPORTER</div><div class="au-agent-role">QBR Generator</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#c77dff">🔮</div><div class="au-agent-info"><div class="au-agent-name">ORACLE</div><div class="au-agent-role">Partner Fit Scoring</div></div></div>
+        </div>
+      </div>
+
+      <!-- POST SALES -->
+      <div class="au-district" style="--dc:#ff6b9d">
+        <div class="au-district-header"><span class="au-dot" style="background:#ff6b9d"></span>Post Sales</div>
+        <div class="au-count">3 FLMs · 18 ICs · CS Lead</div>
+        <div class="au-agents">
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#ff6b9d">❤️</div><div class="au-agent-info"><div class="au-agent-name">PULSE</div><div class="au-agent-role">Health Monitor</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#ff6b9d">⚠️</div><div class="au-agent-info"><div class="au-agent-name">PREDICTOR</div><div class="au-agent-role">Churn Risk Scoring</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#ff6b9d">🚀</div><div class="au-agent-info"><div class="au-agent-name">CATALYST</div><div class="au-agent-role">Expansion Play Trigger</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#ff6b9d">🏅</div><div class="au-agent-info"><div class="au-agent-name">CERTIFIER</div><div class="au-agent-role">Agent Recommender</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#ff6b9d">🎓</div><div class="au-agent-info"><div class="au-agent-name">MENTOR</div><div class="au-agent-role">Onboarding Coach</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#ff6b9d">📞</div><div class="au-agent-info"><div class="au-agent-name">CONCIERGE</div><div class="au-agent-role">Renewal Prep</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#ff6b9d">📊</div><div class="au-agent-info"><div class="au-agent-name">MEASURER</div><div class="au-agent-role">ROI Calculator</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#ff6b9d">🔔</div><div class="au-agent-info"><div class="au-agent-name">WATCHDOG</div><div class="au-agent-role">Usage Alert System</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#ff6b9d">🎯</div><div class="au-agent-info"><div class="au-agent-name">UPSELLER</div><div class="au-agent-role">Whitespace Finder</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#ff6b9d">🤖</div><div class="au-agent-info"><div class="au-agent-name">ADVOCATE</div><div class="au-agent-role">NPS & Reference</div></div></div>
+        </div>
+      </div>
+
+      <!-- XDR -->
+      <div class="au-district" style="--dc:#34d399">
+        <div class="au-district-header"><span class="au-dot" style="background:#34d399"></span>XDR</div>
+        <div class="au-count">3 FLMs · 18 ICs · SOC Director</div>
+        <div class="au-agents">
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#34d399">🏃</div><div class="au-agent-info"><div class="au-agent-name">ORCHESTRATOR</div><div class="au-agent-role">Ramp Sequencing</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#34d399">📥</div><div class="au-agent-info"><div class="au-agent-name">INTAKE</div><div class="au-agent-role">IER Workspace Setup</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#34d399">🔄</div><div class="au-agent-info"><div class="au-agent-name">GENERATOR</div><div class="au-agent-role">Pipe-Gen Copilot</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#34d399">📧</div><div class="au-agent-info"><div class="au-agent-name">OUTREACH</div><div class="au-agent-role">Sequence Builder</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#34d399">🎯</div><div class="au-agent-info"><div class="au-agent-name">TARGETER</div><div class="au-agent-role">ICP Fit Scoring</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#34d399">📊</div><div class="au-agent-info"><div class="au-agent-name">TRACKER</div><div class="au-agent-role">Activity Metrics</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#34d399">🧪</div><div class="au-agent-info"><div class="au-agent-name">TESTER</div><div class="au-agent-role">A/B Message Opt</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#34d399">📋</div><div class="au-agent-info"><div class="au-agent-name">QUALIFIER</div><div class="au-agent-role">Lead Scoring</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#34d399">🗓️</div><div class="au-agent-info"><div class="au-agent-name">SCHEDULER</div><div class="au-agent-role">Meeting Cadence</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#34d399">🏋️</div><div class="au-agent-info"><div class="au-agent-name">COACH</div><div class="au-agent-role">SDR Skill Builder</div></div></div>
+        </div>
+      </div>
+
+      <!-- OPERATIONS -->
+      <div class="au-district" style="--dc:#f4a623">
+        <div class="au-district-header"><span class="au-dot" style="background:#f4a623"></span>Operations</div>
+        <div class="au-count">3 FLMs · 18 ICs · Rev Ops</div>
+        <div class="au-agents">
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#f4a623">📐</div><div class="au-agent-info"><div class="au-agent-name">VALIDATOR</div><div class="au-agent-role">Forecast Accuracy</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#f4a623">🧹</div><div class="au-agent-info"><div class="au-agent-name">CUSTODIAN</div><div class="au-agent-role">Data Hygiene</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#f4a623">📏</div><div class="au-agent-info"><div class="au-agent-name">CALCULATOR</div><div class="au-agent-role">Pipeline Coverage</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#f4a623">🔧</div><div class="au-agent-info"><div class="au-agent-name">MECHANIC</div><div class="au-agent-role">Process Optimizer</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#f4a623">📡</div><div class="au-agent-info"><div class="au-agent-name">MONITOR</div><div class="au-agent-role">System Health</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#f4a623">🗄️</div><div class="au-agent-info"><div class="au-agent-name">LIBRARIAN</div><div class="au-agent-role">Content Governance</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#f4a623">⚡</div><div class="au-agent-info"><div class="au-agent-name">AUTOMATOR</div><div class="au-agent-role">Workflow Builder</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#f4a623">🎛️</div><div class="au-agent-info"><div class="au-agent-name">CONTROLLER</div><div class="au-agent-role">Territory Balancer</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#f4a623">📊</div><div class="au-agent-info"><div class="au-agent-name">REPORTER</div><div class="au-agent-role">Board Deck Gen</div></div></div>
+          <div class="au-agent"><div class="au-agent-icon" style="--dc:#f4a623">🔐</div><div class="au-agent-info"><div class="au-agent-name">GATEKEEPER</div><div class="au-agent-role">Permission & Access</div></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ STAGE 6: Compound (after Agent Universe) ═══ -->
+  <div id="stage-06" class="intel-pipeline" style="padding:0">
+    <div class="ip-stage">
+      <div class="ip-stage-marker">
+        <div class="ip-stage-num"><svg viewBox="0 0 24 24"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></div>
+        <div class="ip-stage-line" style="background:transparent"></div>
+      </div>
+      <div class="ip-stage-content">
+        <div class="ip-stage-title">06 · Compound & Return to Vault</div>
+        <div class="ip-stage-desc">Every agent outcome updates the codebase and flows back into individual knowledge vaults. Repeatable benefits are codified. Actionable patterns are surfaced. The next cycle starts smarter than the last.</div>
+      </div>
+    </div>
+  </div>
+  <div id="ai-end"></div>
+  <div class="ip-bidi" style="margin-bottom:0;padding:8px 60px 0">
+    <div class="ip-bidi-line"></div>
+    <div class="ip-bidi-label">↑ Every cycle compounds: agents learn, vaults grow, outcomes improve ↑</div>
+    <div class="ip-bidi-line"></div>
+  </div>
+
+  <!-- Gutter bars -->
+  <div id="hi-gutter" class="q-gutter"><div class="q-gutter-label">HI Quotient</div></div>
+  <div id="ai-gutter" class="q-gutter"><div class="q-gutter-label">AI Quotient</div></div>
+
+  <div class="s3-footer">
+    GTM Performance & Productivity · Product Architecture v2 · Design System Inheritance → AI Orchestration → MCP Protocol → AcmeSecure Container
+  </div>
+
+</div>
+</div>
+
+<footer class="global-footer">
+  <p>GTM PERFORMANCE & PRODUCTIVITY<br>2026</p>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+<script>
+const hamburger=document.getElementById('hamburgerBtn'),overlay=document.getElementById('chapterOverlay');
+hamburger.addEventListener('click',()=>{hamburger.classList.toggle('open');overlay.classList.toggle('open');document.body.style.overflow=overlay.classList.contains('open')?'hidden':'';});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open')){hamburger.classList.remove('open');overlay.classList.remove('open');document.body.style.overflow='';}});
+overlay.addEventListener('click',e=>{if(e.target===overlay){hamburger.classList.remove('open');overlay.classList.remove('open');document.body.style.overflow='';}});
+</script>
+<script>
+function positionGutters(){
+  const page=document.querySelector('.s3-page');
+  if(!page)return;
+  const pr=page.getBoundingClientRect();
+  const pos=(id)=>{const el=document.getElementById(id);if(!el)return 0;return el.getBoundingClientRect().top-pr.top;};
+  const bot=(id)=>{const el=document.getElementById(id);if(!el)return 0;const r=el.getBoundingClientRect();return r.bottom-pr.top;};
+  const hi=document.getElementById('hi-gutter');
+  const ai=document.getElementById('ai-gutter');
+  if(hi){hi.style.top=pos('hi-start')+'px';hi.style.height=(bot('hi-end')-pos('hi-start'))+'px';}
+  if(ai){ai.style.top=pos('ai-start')+'px';ai.style.height=(bot('ai-end')-pos('ai-start'))+'px';}
+}
+window.addEventListener('load',positionGutters);
+window.addEventListener('resize',positionGutters);
+setTimeout(positionGutters,500);
+</script>
+
+</body>
+</html>

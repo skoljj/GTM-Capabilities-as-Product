@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 6: The Action Layer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══ MERGED ROOT VARIABLES ═══ */
+:root {
+  --accent: #D0D8EC;
+  --action: #34d399;
+  --action-bg: rgba(52,211,153,0.06);
+  --action-border: rgba(52,211,153,0.20);
+  --agent: #34d399;
+  --api: #60a5fa;
+  --api-bg: rgba(96,165,250,0.06);
+  --api-border: rgba(96,165,250,0.18);
+  --aq: #a78bfa;
+  --aq-accent: rgba(167,139,250,0.10);
+  --aq-bg: rgba(167,139,250,0.05);
+  --aq-border: rgba(167,139,250,0.20);
+  --awareness: #a78bfa;
+  --bg: #0c0e13;
+  --bg2: #111520;
+  --bg3: #161B27;
+  --border: #252a3a;
+  --border-light: #2f3548;
+  --border2: rgba(255,255,255,.09);
+  --commercial: #fb923c;
+  --commercial-bg: rgba(251,146,60,0.10);
+  --commercial-border: rgba(251,146,60,0.25);
+  --commit: #34d399;
+  --cu-tool: #a78bfa;
+  --dim: #4A5068;
+  --done: #60a5fa;
+  --education: #818cf8;
+  --enterprise: #a78bfa;
+  --enterprise-bg: rgba(168,85,247,0.10);
+  --enterprise-border: rgba(168,85,247,0.25);
+  --faint: #2A3040;
+  --figma: #f472b6;
+  --figma-bg: rgba(244,114,182,0.06);
+  --figma-border: rgba(244,114,182,0.22);
+  --flm: #fb923c;
+  --gap: #f87171;
+  --given: #fbbf24;
+  --gong: #34d399;
+  --gray: #828A9E;
+  --grow: #f472b6;
+  --hq: #60a5fa;
+  --hq-accent: rgba(96,165,250,0.10);
+  --hq-bg: rgba(96,165,250,0.05);
+  --hq-border: rgba(96,165,250,0.20);
+  --hr: #f472b6;
+  --impact: #f87171;
+  --mcp: #34d399;
+  --mcp-bg: rgba(52,211,153,0.06);
+  --mcp-border: rgba(52,211,153,0.22);
+  --off: #C8CDD8;
+  --onboard: #fbbf24;
+  --orch: #f59e0b;
+  --orch-bg: rgba(245,158,11,0.06);
+  --orch-border: rgba(245,158,11,0.22);
+  --platform: #a78bfa;
+  --platform-bg: rgba(167,139,250,0.04);
+  --platform-border: rgba(167,139,250,0.16);
+  --plg: #60a5fa;
+  --plg-bg: rgba(59,130,246,0.10);
+  --plg-border: rgba(59,130,246,0.25);
+  --product: #f472b6;
+  --proto: #fbbf24;
+  --rag: #94a3b8;
+  --rag-bg: rgba(148,163,184,0.05);
+  --rag-border: rgba(148,163,184,0.16);
+  --selection: #60a5fa;
+  --sfdc: #60a5fa;
+  --skill: #fb923c;
+  --surface: #13161e;
+  --surface-2: #1a1e2a;
+  --surface-3: #212636;
+  --text: #e4e7ee;
+  --text-dim: #3e465c;
+  --text-mid: #a0a8be;
+  --text-muted: #6b7590;
+  --vault: #f59e0b;
+  --vault-bg: rgba(245,158,11,0.04);
+  --vault-border: rgba(245,158,11,0.18);
+  --white: #EEEFF2;
+}
+
+
+/* ═══ GLOBAL STYLES ═══ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html {
+  background: var(--bg);
+  color: var(--text);
+  scroll-behavior: smooth;
+  scroll-padding-top: 64px;
+}
+body {
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══ STICKY NAV ═══ */
+.global-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 56px;
+  background: rgba(12,14,19,0.82);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.global-nav-mark {
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  letter-spacing: .16em; color: var(--text-dim);
+}
+.global-nav-mark b { color: var(--white, #eee); font-weight: 500; }
+.global-nav-links { display: flex; gap: 4px; }
+.global-nav-links a {
+  font-size: 11px; color: var(--text-dim); text-decoration: none;
+  letter-spacing: .03em; padding: 6px 14px; border-radius: 6px;
+  transition: color .25s, background .25s;
+}
+.global-nav-links a:hover { color: var(--text-mid); background: rgba(255,255,255,0.04); }
+.global-nav-links a.active { color: var(--text); background: rgba(255,255,255,0.06); }
+
+/* ═══ SECTION TRANSITIONS ═══ */
+.section-transition {
+  position: relative; height: 140px;
+  display: flex; align-items: center; justify-content: center;
+}
+.section-transition::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, var(--bg) 0%, rgba(255,255,255,0.012) 50%, var(--bg) 100%);
+}
+.section-transition-inner {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.section-transition-num {
+  font-family: 'IBM Plex Mono', monospace; font-size: 9px;
+  letter-spacing: .3em; text-transform: uppercase; color: var(--text-dim);
+}
+.section-transition-title {
+  font-family: 'Instrument Serif', serif; font-size: 20px;
+  font-weight: 400; color: var(--text-mid); font-style: italic;
+}
+.section-transition-line {
+  width: 1px; height: 24px;
+  background: linear-gradient(to bottom, var(--text-dim), transparent); opacity: 0.4;
+}
+
+/* ═══ GLOBAL REVEAL ═══ */
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+}
+.reveal.vis { opacity: 1; transform: translateY(0); }
+
+/* ═══ GLOBAL FOOTER ═══ */
+.global-footer {
+  padding: 48px 32px; text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.global-footer p {
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+  color: var(--text-dim); letter-spacing: .1em; line-height: 1.8;
+}
+
+/* ═══ PANEL LAYOUT ═══ */
+.section-panel { position: relative; }
+
+/* ═══ UNIVERSAL CENTERING ═══ */
+.section-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.s6-page {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.section-transition {
+  width: 100%;
+}
+
+@media(max-width:860px) {
+  .global-nav { padding: 0 16px; }
+  .global-nav-links { display: none; }
+}
+
+
+/* ═══════════════════════════════════════════════════ */
+/* SECTION 6 STYLES (prefixed s6-)                   */
+/* ═══════════════════════════════════════════════════ */
+
+.s6-page { width:100%; max-width:1400px; }
+
+#panel-6 > .s6-page {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 24px 28px 80px;
+}
+
+/* Header */
+.s6-header { text-align:center; margin-bottom:28px; }
+.s6-header-eyebrow { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--text-dim); margin-bottom:4px; }
+.s6-header h1 { font-family:'Instrument Serif',serif; font-size:36px; font-weight:400; margin-bottom:4px; }
+.s6-header h1 em { color:var(--action); font-style:italic; }
+.s6-header .s6-sub { font-size:18px; color:var(--text-muted); font-weight:300; max-width:900px; margin:0 auto; line-height:1.55; }
+
+/* Thesis */
+.s6-thesis {
+  text-align:center; margin-bottom:36px;
+  padding:20px 40px; border-radius:12px;
+  border:1px solid var(--action-border);
+  background:var(--action-bg);
+  max-width:1100px; margin-left:auto; margin-right:auto;
+}
+.s6-thesis-text {
+  font-size:18px; color:var(--text); line-height:1.6;
+  font-weight:400; max-width:none; margin:0 auto;
+}
+.s6-thesis-text strong { font-weight:700; }
+.s6-thesis-text .action-hl { color:var(--action); font-weight:600; }
+.s6-thesis-text .vault-hl { color:var(--vault); font-weight:600; }
+
+/* Shared */
+.s6-label { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; font-weight:700; margin-bottom:5px; }
+.s6-tag { display:inline-block; padding:3px 8px; border-radius:4px; font-size:10px; font-weight:600; letter-spacing:0.3px; }
+.s6-tags { display:flex; gap:4px; flex-wrap:wrap; margin-top:6px; }
+.s6-title { font-size:16px; font-weight:700; margin-bottom:3px; line-height:1.3; }
+.s6-sub-text { font-size:14px; color:var(--text-muted); line-height:1.5; }
+
+/* Divider */
+.s6-divider {
+  display:flex; justify-content:center; align-items:center;
+  padding:8px 0; gap:8px;
+}
+.s6-divider-line { width:1px; height:14px; background:var(--text-dim); opacity:0.2; }
+.s6-divider-label {
+  font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  font-weight:700; padding:4px 12px; border-radius:4px;
+  background:var(--surface); border:1px solid var(--border); color:var(--text-dim);
+}
+.s6-divider-arrow { font-size:9px; color:var(--text-dim); opacity:0.35; }
+
+/* ── Three Layers Row ── */
+.layers-row {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+  margin-bottom:28px;
+  width:100%;
+}
+.layer-card {
+  padding:18px 20px; border-radius:10px;
+  background:var(--surface); border:1px solid var(--border);
+  position:relative;
+}
+.layer-card .s6-accent-bar {
+  position:absolute; top:0; left:10px; right:10px; height:2px;
+  border-radius:0 0 2px 2px;
+}
+
+/* ── Individual Condition Panel ── */
+.condition-frame {
+  border:1px solid var(--action-border);
+  background:var(--action-bg);
+  border-radius:14px; padding:28px 28px;
+  margin-bottom:28px; width:100%;
+}
+.condition-header {
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:18px; padding-bottom:14px;
+  border-bottom:1px solid rgba(52,211,153,0.12);
+}
+.condition-icon {
+  width:40px; height:40px; border-radius:10px;
+  background:rgba(52,211,153,0.12); border:1px solid var(--action-border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; font-weight:700; color:var(--action);
+}
+.condition-title { font-size:20px; font-weight:700; color:var(--action); }
+.condition-subtitle { font-size:14px; color:var(--text-muted); }
+.condition-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:12px;
+}
+.condition-card {
+  padding:18px 18px; border-radius:10px;
+  background:var(--surface); border:1px solid var(--border);
+  position:relative;
+}
+.condition-card .cc-bar {
+  position:absolute; top:0; left:10px; right:10px; height:2px;
+  border-radius:0 0 2px 2px;
+}
+.condition-card .cc-icon { font-size:20px; margin-bottom:8px; }
+.condition-card .cc-title { font-size:16px; font-weight:700; margin-bottom:6px; }
+.condition-card .cc-desc { font-size:14px; color:var(--text-muted); line-height:1.55; margin-bottom:10px; }
+.condition-card .cc-examples { display:flex; flex-direction:column; gap:4px; }
+.cc-ex {
+  font-size:14px; color:var(--text-mid); display:flex;
+  align-items:flex-start; gap:6px; line-height:1.45;
+}
+.cc-ex .cce-arrow { color:var(--text-dim); flex-shrink:0; }
+
+/* ── Action Components ── */
+.components-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+  margin-bottom:28px;
+  width:100%;
+}
+.component-card {
+  padding:20px 20px; border-radius:10px;
+  background:var(--surface); border:1px solid var(--border);
+  position:relative;
+}
+.component-card .cmp-accent {
+  position:absolute; top:0; left:10px; right:10px;
+  height:2px; border-radius:0 0 2px 2px;
+}
+.component-card .cmp-icon { font-size:20px; margin-bottom:8px; }
+.component-card .cmp-title { font-size:16px; font-weight:700; margin-bottom:6px; }
+.component-card .cmp-desc { font-size:14px; color:var(--text-muted); line-height:1.55; margin-bottom:10px; }
+
+.action-tag {
+  padding:3px 8px; border-radius:3px; font-size:10px; font-weight:600;
+  background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.15); color:var(--action);
+}
+.sfdc-tag {
+  padding:3px 8px; border-radius:3px; font-size:10px; font-weight:600;
+  background:rgba(96,165,250,0.08); border:1px solid rgba(96,165,250,0.15); color:var(--sfdc);
+}
+.gong-tag {
+  padding:3px 8px; border-radius:3px; font-size:10px; font-weight:600;
+  background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.15); color:var(--gong);
+}
+.vault-tag {
+  padding:3px 8px; border-radius:3px; font-size:10px; font-weight:600;
+  background:var(--vault-bg); border:1px solid var(--vault-border); color:var(--vault);
+}
+
+/* ── Segment Map ── */
+.segment-row {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-bottom:28px;
+  width:100%;
+}
+.segment-card {
+  border-radius:14px; padding:24px 24px;
+  position:relative;
+}
+.segment-card.commercial {
+  border:1px solid var(--commercial-border);
+  background:var(--commercial-bg);
+}
+.segment-card.enterprise {
+  border:1px solid var(--enterprise-border);
+  background:var(--enterprise-bg);
+}
+.seg-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:16px; padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+.seg-dot {
+  width:10px; height:10px; border-radius:50%;
+  flex-shrink:0;
+}
+.seg-title { font-size:18px; font-weight:700; }
+.seg-meta { font-size:11px; color:var(--text-muted); font-family:'IBM Plex Mono',monospace; }
+.seg-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.seg-stat {
+  padding:12px 14px; border-radius:8px;
+  background:var(--surface); border:1px solid var(--border);
+}
+.seg-stat .ss-label { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; font-weight:700; color:var(--text-dim); margin-bottom:4px; }
+.seg-stat .ss-value { font-size:18px; font-weight:700; }
+.seg-stat .ss-sub { font-size:12px; color:var(--text-muted); margin-top:2px; }
+
+/* ── Delivery Items ── */
+.delivery-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:14px;
+}
+.delivery-item {
+  padding:12px 14px; border-radius:8px;
+  background:var(--surface); border:1px solid var(--border);
+}
+.delivery-item .di-icon { font-size:12px; margin-right:6px; color:var(--action); }
+.delivery-item .di-title { font-size:14px; font-weight:600; margin-bottom:3px; }
+.delivery-item .di-sub { font-size:12px; color:var(--text-muted); line-height:1.45; }
+
+/* ── Sizing: Tall / Grande / Venti ── */
+.sizing-row {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+  margin-bottom:28px;
+  width:100%;
+}
+.sizing-card {
+  padding:22px 22px; border-radius:10px;
+  background:var(--surface); border:1px solid var(--border);
+  position:relative;
+}
+.sizing-card .sz-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:10px;
+}
+.sizing-card .sz-title { font-size:16px; font-weight:700; }
+.sizing-card .sz-scope { font-size:10px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace; }
+.sizing-card .sz-items { display:flex; flex-direction:column; gap:5px; }
+.sz-item {
+  font-size:14px; color:var(--text-mid); display:flex;
+  align-items:flex-start; gap:6px; line-height:1.45;
+}
+.sz-item .sz-arrow { color:var(--action); flex-shrink:0; font-size:12px; }
+
+/* ── Callout ── */
+.s6-callout {
+  padding:20px 24px; border-radius:10px;
+  border:1px solid var(--enterprise-border);
+  background:var(--enterprise-bg);
+  width:100%; margin-bottom:28px;
+}
+.s6-callout .co-title-text { font-size:16px; font-weight:700; margin-bottom:8px; color:var(--enterprise); }
+.s6-callout .co-body { font-size:14px; color:var(--text-muted); line-height:1.6; }
+
+/* ── Feedback Loop ── */
+.s6-feedback {
+  margin-top:8px; padding:16px 20px;
+  border-radius:10px;
+  border:1px solid var(--action-border);
+  background:var(--action-bg);
+  text-align:center; width:100%;
+}
+.fl-title {
+  font-size:11px; letter-spacing:2px; text-transform:uppercase;
+  font-weight:700; color:var(--action); margin-bottom:10px;
+}
+.fl-steps {
+  display:flex; align-items:center; justify-content:center;
+  gap:0; flex-wrap:wrap;
+}
+.fl-step {
+  padding:6px 14px; font-size:14px; font-weight:600;
+  color:var(--text-mid);
+}
+.fl-arrow { color:var(--action); font-size:16px; padding:0 6px; opacity:0.5; }
+
+/* Footer */
+.s6-footer { margin-top:32px; text-align:center; font-size:8.5px; color:var(--text-dim); }
+
+/* ── Drill-Down Org View ── */
+.drill-view { display:flex; flex-direction:column; gap:16px; width:100%; margin-bottom:28px; }
+.drill-segment { border-radius:14px; padding:24px 24px; width:100%; }
+.drill-segment.commercial { border:1px solid var(--commercial-border); background:var(--commercial-bg); }
+.drill-segment.enterprise { border:1px solid var(--enterprise-border); background:var(--enterprise-bg); }
+.drill-seg-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border);
+}
+.drill-region { margin-bottom:16px; }
+.drill-region:last-child { margin-bottom:0; }
+.drill-region-header { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.drill-region-badge {
+  padding:3px 8px; border-radius:4px; font-size:9px; font-weight:700;
+  letter-spacing:1px; text-transform:uppercase;
+}
+.drill-region-meta { font-size:11px; color:var(--text-muted); font-family:'IBM Plex Mono',monospace; }
+.drill-flm-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:8px; }
+.drill-flm {
+  padding:12px 10px; border-radius:8px;
+  background:var(--surface); border:1px solid var(--border);
+  text-align:center; transition:border-color 0.3s, transform 0.2s;
+}
+.drill-flm:hover { border-color:rgba(255,255,255,0.12); transform:translateY(-1px); }
+.drill-flm.incoming { border-style:dashed; opacity:0.6; }
+.drill-flm-icon { font-size:20px; margin-bottom:3px; }
+.drill-flm-name { font-size:12px; font-weight:700; margin-bottom:1px; }
+.drill-flm-meta { font-size:9px; color:var(--text-muted); font-family:'IBM Plex Mono',monospace; margin-bottom:5px; }
+.cond-dots { display:flex; justify-content:center; gap:3px; margin-bottom:5px; }
+.cd { width:6px; height:6px; border-radius:50%; display:inline-block; }
+.agent-pips { display:flex; justify-content:center; gap:2px; }
+.ap {
+  width:12px; height:12px; border-radius:3px; display:inline-flex;
+  align-items:center; justify-content:center; font-size:7px;
+  background:rgba(52,211,153,0.10); border:1px solid rgba(52,211,153,0.22); color:var(--action);
+}
+.drill-legend {
+  display:flex; justify-content:center; gap:16px; flex-wrap:wrap;
+  margin-top:14px; padding-top:12px; border-top:1px solid var(--border);
+}
+.drill-legend-item {
+  display:flex; align-items:center; gap:5px;
+  font-size:10px; color:var(--text-muted);
+}
+.drill-legend-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+
+/* ── Crescendo ── */
+.crescendo {
+  border:2px solid var(--action-border);
+  background:linear-gradient(135deg, rgba(52,211,153,0.03) 0%, rgba(167,139,250,0.03) 100%);
+  border-radius:16px; padding:40px 36px; text-align:center; width:100%; margin-bottom:28px;
+}
+.crescendo-eyebrow {
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--action); margin-bottom:20px; font-weight:700;
+}
+.crescendo-eq {
+  display:flex; align-items:center; justify-content:center;
+  gap:16px; margin-bottom:28px; flex-wrap:wrap;
+}
+.crescendo-term {
+  padding:16px 24px; border-radius:12px;
+  background:var(--surface); border:1px solid var(--border);
+}
+.crescendo-term-lbl {
+  font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  font-weight:700; margin-bottom:4px;
+}
+.crescendo-term-val { font-size:28px; font-weight:700; }
+.crescendo-term-sub { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.crescendo-op { font-size:32px; font-weight:300; color:var(--action); opacity:0.5; }
+.crescendo-result {
+  font-family:'Instrument Serif',serif; font-size:24px; font-weight:400;
+  color:var(--action); margin-bottom:24px; font-style:italic; line-height:1.5;
+}
+.crescendo-grid {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:10px;
+  max-width:920px; margin:0 auto;
+}
+.crescendo-stat {
+  padding:14px 12px; border-radius:8px;
+  background:var(--surface); border:1px solid var(--action-border);
+}
+.crescendo-stat-val { font-size:16px; font-weight:700; color:var(--action); margin-bottom:3px; }
+.crescendo-stat-lbl { font-size:11px; color:var(--text-muted); line-height:1.4; }
+
+/* ═══ HAMBURGER + OVERLAY ═══ */
+.hamburger { display:flex; flex-direction:column; gap:4px; cursor:pointer; padding:8px; margin-left:-8px; margin-right:12px; z-index:301; position:relative; background:none; border:none; }
+.hamburger span { display:block; width:18px; height:1.5px; background:var(--text-dim); transition:all 0.3s cubic-bezier(0.22,1,0.36,1); }
+.hamburger:hover span { background:var(--text-mid); }
+.hamburger.open span:nth-child(1) { transform:rotate(45deg) translate(4px,4px); }
+.hamburger.open span:nth-child(2) { opacity:0; }
+.hamburger.open span:nth-child(3) { transform:rotate(-45deg) translate(4px,-4px); }
+.chapter-overlay { position:fixed; inset:0; z-index:250; background:rgba(12,14,19,0.96); backdrop-filter:blur(24px) saturate(1.4); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:80px 28px 40px; opacity:0; pointer-events:none; transition:opacity 0.35s cubic-bezier(0.22,1,0.36,1); overflow-y:auto; }
+.chapter-overlay.open { opacity:1; pointer-events:all; }
+.co-title { font-family:'Instrument Serif',serif; font-size:28px; font-weight:400; color:var(--white,#EEEFF2); margin-bottom:32px; font-style:italic; }
+.ch-list { display:flex; flex-direction:column; gap:12px; width:100%; max-width:600px; }
+.ch-link { display:grid; grid-template-columns:48px 1fr auto; align-items:center; gap:20px; padding:20px 24px; border:1px solid var(--border,#252a3a); border-radius:12px; background:var(--surface,#13161e); text-decoration:none; transition:border-color 0.3s,transform 0.25s,box-shadow 0.3s; }
+.ch-link:hover { border-color:rgba(255,255,255,0.09); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+.ch-link.current { border-color:rgba(52,211,153,0.25); background:rgba(52,211,153,0.04); }
+.ch-num { font-family:'Instrument Serif',serif; font-size:28px; font-weight:400; line-height:1; opacity:0.35; }
+.ch-link:nth-child(1) .ch-num { color:#a78bfa; } .ch-link:nth-child(2) .ch-num { color:#D0D8EC; } .ch-link:nth-child(3) .ch-num { color:#f59e0b; } .ch-link:nth-child(4) .ch-num { color:#f472b6; } .ch-link:nth-child(5) .ch-num { color:#60a5fa; } .ch-link:nth-child(6) .ch-num { color:#34d399; } .ch-link:nth-child(7) .ch-num { color:#a78bfa; }
+.ch-info { display:flex; flex-direction:column; gap:2px; }
+.ch-label { font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-dim,#3e465c); }
+.ch-ttl { font-size:15px; font-weight:600; color:var(--white,#EEEFF2); }
+.ch-arrow { font-size:16px; color:var(--text-dim,#3e465c); transition:color 0.3s,transform 0.3s; }
+.ch-link:hover .ch-arrow { color:var(--text-mid); transform:translateX(4px); }
+.ch-link.current .ch-arrow { color:#34d399; }
+</style>
+</head>
+<body>
+
+<nav class="global-nav">
+  <div style="display:flex;align-items:center">
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="global-nav-mark"><b>HI</b><sup style="font-size:8px;color:var(--dim,#4A5068)">AI</sup> = <b>V</b></div>
+  </div>
+  <div class="global-nav-links">
+    <a href="01-framework.html">Framework</a>
+    <a href="02-knowledge-vault.html">Knowledge Vault</a>
+    <a href="03-product-architecture.html">Architecture</a>
+    <a href="04-bowtie-funnel.html">Bowtie</a>
+    <a href="05-opportunity-seeker.html">Opportunity</a>
+    <a href="06-action-layer.html" class="active">Action Layer</a>
+  </div>
+</nav>
+<div class="chapter-overlay" id="chapterOverlay">
+  <div class="co-title">Chapters</div>
+  <div class="ch-list">
+    <a href="../product_design_concept1.html" class="ch-link"><div class="ch-num">◆</div><div class="ch-info"><div class="ch-label">Chapter Zero</div><div class="ch-ttl">Immersive Diagram</div></div><div class="ch-arrow">&rarr;</div></a>
+    <a href="01-framework.html" class="ch-link"><div class="ch-num">I</div><div class="ch-info"><div class="ch-label">Chapter One</div><div class="ch-ttl">The Framework</div></div><div class="ch-arrow">&rarr;</div></a>
+    <a href="02-knowledge-vault.html" class="ch-link"><div class="ch-num">II</div><div class="ch-info"><div class="ch-label">Chapter Two</div><div class="ch-ttl">The Knowledge Vault</div></div><div class="ch-arrow">&rarr;</div></a>
+    <a href="03-product-architecture.html" class="ch-link"><div class="ch-num">III</div><div class="ch-info"><div class="ch-label">Chapter Three</div><div class="ch-ttl">Product Architecture</div></div><div class="ch-arrow">&rarr;</div></a>
+    <a href="04-bowtie-funnel.html" class="ch-link"><div class="ch-num">IV</div><div class="ch-info"><div class="ch-label">Chapter Four</div><div class="ch-ttl">The Bowtie Funnel</div></div><div class="ch-arrow">&rarr;</div></a>
+    <a href="05-opportunity-seeker.html" class="ch-link"><div class="ch-num">V</div><div class="ch-info"><div class="ch-label">Chapter Five</div><div class="ch-ttl">Opportunity Seeker</div></div><div class="ch-arrow">&rarr;</div></a>
+    <a href="06-action-layer.html" class="ch-link current"><div class="ch-num">VI</div><div class="ch-info"><div class="ch-label">Chapter Six</div><div class="ch-ttl">The Action Layer</div></div><div class="ch-arrow">&rarr;</div></a>
+  </div>
+</div>
+<div style="height:56px"></div>
+
+<div class="section-panel" id="panel-6">
+<div class="s6-page">
+
+  <!-- ═══ HEADER ═══ -->
+  <div class="s6-header reveal">
+    <div class="s6-header-eyebrow">GTM Performance &amp; Productivity &middot; The Field, Instrumented</div>
+    <h1>The <em>Action Layer</em></h1>
+    <div class="s6-sub">Not team averages. Not segment rollups. Each individual's contribution, capacity, development gaps, and trajectory &mdash; live, granular, and actionable in the moment it matters.</div>
+  </div>
+
+  <!-- ═══ THESIS ═══ -->
+  <div class="s6-thesis reveal">
+    <div class="s6-thesis-text">
+      The <span class="vault-hl">Knowledge Vault</span> records what happened. The action layer makes something happen next.
+      Every FLM gets a live, per-person read: contribution, capacity, development gaps, trajectory.
+      <strong>It doesn't report after the fact &mdash; it intervenes while the outcome is still changeable.</strong>
+      Coaching intelligence, in-workflow nudges, and inspection tools reach the manager
+      <span class="action-hl">in the moment they can still act</span> &mdash; not in a quarterly post-mortem.
+    </div>
+  </div>
+
+  <!-- ═══ THREE LAYERS: KNOW / LEARN / DO ═══ -->
+  <div class="layers-row reveal">
+    <div class="layer-card">
+      <div class="s6-accent-bar" style="background:var(--awareness)"></div>
+      <div class="s6-label" style="color:var(--awareness)">Layer 1 &middot; Know</div>
+      <div class="s6-title">Awareness &amp; Understanding</div>
+      <div class="s6-sub-text">Content, campaigns, comms. Why this matters, what's changing, what's expected.</div>
+    </div>
+    <div class="layer-card">
+      <div class="s6-accent-bar" style="background:var(--figma)"></div>
+      <div class="s6-label" style="color:var(--figma)">Layer 2 &middot; Learn</div>
+      <div class="s6-title">Competency &amp; Skill</div>
+      <div class="s6-sub-text">Role-based curriculum, certifications, practice sandboxes, graduation gates.</div>
+    </div>
+    <div class="layer-card">
+      <div class="s6-accent-bar" style="background:var(--action)"></div>
+      <div class="s6-label" style="color:var(--action)">Layer 3 &middot; Do</div>
+      <div class="s6-title">In-Workflow Action</div>
+      <div class="s6-sub-text">Agentic assists, coaching prompts, deal intelligence, inspection tools, feedback loops.</div>
+    </div>
+  </div>
+
+  <!-- ═══ INDIVIDUAL CONDITION: THE FOUR LENSES ═══ -->
+  <div class="s6-divider reveal">
+    <div class="s6-divider-line"></div>
+    <div class="s6-divider-label" style="color:var(--action)">Per-Individual Condition &mdash; Four Lenses</div>
+    <div class="s6-divider-line"></div>
+  </div>
+
+  <div class="condition-frame reveal">
+    <div class="condition-header">
+      <div class="condition-icon">&#x25CE;</div>
+      <div>
+        <div class="condition-title">Individual Condition Report</div>
+        <div class="condition-subtitle">One person. Four lenses. Updated live &mdash; not monthly, not quarterly.</div>
+      </div>
+    </div>
+    <div class="condition-grid">
+      <div class="condition-card">
+        <div class="cc-bar" style="background:var(--done)"></div>
+        <div class="cc-icon" style="color:var(--done)">&#x25B2;</div>
+        <div class="cc-title" style="color:var(--done)">Contribution</div>
+        <div class="cc-desc">What this person is producing &mdash; right now. Pipeline generated, deals closed, expansion sourced, activities completed. Measured against their targets, not the team average.</div>
+        <div class="cc-examples">
+          <div class="cc-ex"><span class="cce-arrow">&rarr;</span>Pipeline created vs. quota ratio</div>
+          <div class="cc-ex"><span class="cce-arrow">&rarr;</span>Win rate &amp; deal velocity vs. cohort</div>
+          <div class="cc-ex"><span class="cce-arrow">&rarr;</span>Activity-to-outcome conversion</div>
+        </div>
+      </div>
+      <div class="condition-card">
+        <div class="cc-bar" style="background:var(--vault)"></div>
+        <div class="cc-icon" style="color:var(--vault)">&#x25C6;</div>
+        <div class="cc-title" style="color:var(--vault)">Capacity</div>
+        <div class="cc-desc">Bandwidth, not busyness. Current book of business, deal load, territory coverage &mdash; is this person overloaded, underutilized, or right-sized? The FLM knows before the rep says anything.</div>
+        <div class="cc-examples">
+          <div class="cc-ex"><span class="cce-arrow">&rarr;</span>Active deal count vs. ideal range</div>
+          <div class="cc-ex"><span class="cce-arrow">&rarr;</span>Account coverage &amp; whitespace</div>
+          <div class="cc-ex"><span class="cce-arrow">&rarr;</span>Time-in-stage distribution</div>
+        </div>
+      </div>
+      <div class="condition-card">
+        <div class="cc-bar" style="background:var(--gap)"></div>
+        <div class="cc-icon" style="color:var(--gap)">&#x25C9;</div>
+        <div class="cc-title" style="color:var(--gap)">Development</div>
+        <div class="cc-desc">Where the growth edge is. Skill gaps surfaced from call patterns, certification status, playbook adoption, and coaching brief insights &mdash; specific, not speculative.</div>
+        <div class="cc-examples">
+          <div class="cc-ex"><span class="cce-arrow">&rarr;</span>Discovery depth score (Gong)</div>
+          <div class="cc-ex"><span class="cce-arrow">&rarr;</span>MEDDPIC field completion rate</div>
+          <div class="cc-ex"><span class="cce-arrow">&rarr;</span>Playbook adoption vs. delivery</div>
+        </div>
+      </div>
+      <div class="condition-card">
+        <div class="cc-bar" style="background:var(--action)"></div>
+        <div class="cc-icon" style="color:var(--action)">&#x2197;</div>
+        <div class="cc-title" style="color:var(--action)">Trajectory</div>
+        <div class="cc-desc">The trend line that matters most. Improving, plateauing, or declining &mdash; across every condition dimension. Period-over-period, no ambiguity.</div>
+        <div class="cc-examples">
+          <div class="cc-ex"><span class="cce-arrow">&rarr;</span>30/60/90-day metric trend</div>
+          <div class="cc-ex"><span class="cce-arrow">&rarr;</span>Skill progression velocity</div>
+          <div class="cc-ex"><span class="cce-arrow">&rarr;</span>Ramp attainment vs. timeline</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ACTION LAYER COMPONENTS ═══ -->
+  <div class="s6-divider reveal">
+    <div class="s6-divider-line"></div>
+    <div class="s6-divider-label" style="color:var(--action)">Action Layer Components</div>
+    <div class="s6-divider-line"></div>
+  </div>
+
+  <div class="components-grid reveal">
+    <div class="component-card">
+      <div class="cmp-accent" style="background:var(--gong)"></div>
+      <div class="cmp-icon">&#x1F916;</div>
+      <div class="cmp-title">Coaching Intelligence Agent</div>
+      <div class="cmp-desc">Reads Gong transcripts via MCP. Surfaces MEDDPIC gaps, talk-time patterns, missing discovery questions. Your 1:1 coaching brief arrives pre-loaded with specific call excerpts &mdash; not a blank template.</div>
+      <div class="s6-tags">
+        <span class="gong-tag">Gong MCP</span>
+        <span class="action-tag">AcmeSecure MCP</span>
+      </div>
+    </div>
+    <div class="component-card">
+      <div class="cmp-accent" style="background:var(--sfdc)"></div>
+      <div class="cmp-icon">&#x1F4CA;</div>
+      <div class="cmp-title">FLM Inspection Dashboard</div>
+      <div class="cmp-desc">Pre-built pipeline views by FLM. Deal health scores, stage velocity, forecast accuracy &mdash; auto-populated, not assembled. Every rep's individual condition visible at a glance.</div>
+      <div class="s6-tags">
+        <span class="sfdc-tag">Salesforce MCP</span>
+        <span class="action-tag">AcmeSecure</span>
+      </div>
+    </div>
+    <div class="component-card">
+      <div class="cmp-accent" style="background:var(--action)"></div>
+      <div class="cmp-icon">&#x26A1;</div>
+      <div class="cmp-title">In-Workflow Nudges</div>
+      <div class="cmp-desc">Contextual prompts fired by real signals: deal stalled, MEDDPIC incomplete, expansion whitespace detected. Hits the manager while the outcome is still in play &mdash; not after it's lost.</div>
+      <div class="s6-tags">
+        <span class="action-tag">AcmeSecure Agents</span>
+        <span class="sfdc-tag">Salesforce</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="components-grid reveal">
+    <div class="component-card">
+      <div class="cmp-accent" style="background:var(--vault)"></div>
+      <div class="cmp-icon">&#x1F4C8;</div>
+      <div class="cmp-title">Adoption &amp; Outcome Loops</div>
+      <div class="cmp-desc">Capability usage &rarr; behavior change &rarr; business outcome. Tracks whether what shipped actually moved the number. No more "we launched it" without "and here's what happened."</div>
+      <div class="s6-tags">
+        <span class="vault-tag">GTM Data</span>
+        <span class="gong-tag">Gong</span>
+      </div>
+    </div>
+    <div class="component-card">
+      <div class="cmp-accent" style="background:var(--onboard)"></div>
+      <div class="cmp-icon">&#x1F3AF;</div>
+      <div class="cmp-title">Onboarding Agent</div>
+      <div class="cmp-desc">Guided ramp journeys with graduation gates. Tracks progress, surfaces the next-best-action. The FLM sees exactly where each new hire stands against their 3-month or 9-month ramp target &mdash; live.</div>
+      <div class="s6-tags">
+        <span class="action-tag">AcmeSecure Agents</span>
+      </div>
+    </div>
+    <div class="component-card">
+      <div class="cmp-accent" style="background:var(--aq)"></div>
+      <div class="cmp-icon">&#x1F50D;</div>
+      <div class="cmp-title">Deal Strategy Assist</div>
+      <div class="cmp-desc">Surfaces org charts, suggests multi-threading paths, flags at-risk deals missing economic buyer engagement. Deal review stops being interrogation and starts being an intelligence briefing.</div>
+      <div class="s6-tags">
+        <span class="sfdc-tag">SFDC MCP</span>
+        <span class="gong-tag">Gong MCP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ THE FIELD — EVERY FLM, EVERY AGENT ═══ -->
+  <div class="s6-divider reveal">
+    <div class="s6-divider-line"></div>
+    <div class="s6-divider-label" style="color:var(--action)">Every Manager. Every Agent. Every Individual Instrumented.</div>
+    <div class="s6-divider-line"></div>
+    <div class="s6-divider-arrow">&#x25BC;</div>
+  </div>
+
+  <div class="drill-view">
+
+    <!-- ── COMMERCIAL SALES DRILL-DOWN ── -->
+    <div class="drill-segment commercial reveal">
+      <div class="drill-seg-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="seg-dot" style="background:var(--commercial)"></div>
+          <div class="seg-title" style="color:var(--commercial)">Commercial Sales</div>
+        </div>
+        <div class="seg-meta">FLMs: 17 | SLMs: 3 | AEs: ~103 | GVP: Commercial</div>
+      </div>
+
+      <!-- AMER -->
+      <div class="drill-region">
+        <div class="drill-region-header">
+          <div class="drill-region-badge" style="background:rgba(251,146,60,0.10);color:var(--commercial);border:1px solid var(--commercial-border)">SLM</div>
+          <div class="drill-region-meta">AMER &middot; ~53 AEs &middot; New from SmartSheet</div>
+        </div>
+        <div class="drill-flm-grid">
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 1</div><div class="drill-flm-meta">~6 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 2</div><div class="drill-flm-meta">~6 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--gap)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 3</div><div class="drill-flm-meta">~6 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 4</div><div class="drill-flm-meta">~6 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--gap)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--gap)"></span><span class="cd" style="background:var(--text-dim)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 5</div><div class="drill-flm-meta">~6 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 6</div><div class="drill-flm-meta">~6 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--gap)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 7</div><div class="drill-flm-meta">~5 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 8</div><div class="drill-flm-meta">~6 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--gap)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 9</div><div class="drill-flm-meta">~6 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+        </div>
+      </div>
+
+      <!-- EMEA -->
+      <div class="drill-region">
+        <div class="drill-region-header">
+          <div class="drill-region-badge" style="background:rgba(251,146,60,0.10);color:var(--commercial);border:1px solid var(--commercial-border)">SLM</div>
+          <div class="drill-region-meta">EMEA &middot; ~30 AEs &middot; Dublin + London hubs</div>
+        </div>
+        <div class="drill-flm-grid">
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 10</div><div class="drill-flm-meta">~6 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 11</div><div class="drill-flm-meta">~6 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--gap)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--gap)"></span><span class="cd" style="background:var(--text-dim)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 12</div><div class="drill-flm-meta">~6 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 13</div><div class="drill-flm-meta">~6 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 14</div><div class="drill-flm-meta">~6 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--gap)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+        </div>
+      </div>
+
+      <!-- APAC -->
+      <div class="drill-region">
+        <div class="drill-region-header">
+          <div class="drill-region-badge" style="background:rgba(251,146,60,0.10);color:var(--commercial);border:1px solid var(--commercial-border)">SLM</div>
+          <div class="drill-region-meta">APAC &middot; ~9 AEs &middot; Sydney + Melbourne</div>
+        </div>
+        <div class="drill-flm-grid">
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 15</div><div class="drill-flm-meta">~3 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 16</div><div class="drill-flm-meta">~3 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 17</div><div class="drill-flm-meta">~3 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--gap)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="drill-legend">
+        <div class="drill-legend-item"><span class="drill-legend-dot" style="background:var(--done)"></span>Contribution</div>
+        <div class="drill-legend-item"><span class="drill-legend-dot" style="background:var(--vault)"></span>Capacity</div>
+        <div class="drill-legend-item"><span class="drill-legend-dot" style="background:var(--gap)"></span>Development</div>
+        <div class="drill-legend-item"><span class="drill-legend-dot" style="background:var(--action)"></span>Trajectory</div>
+        <div class="drill-legend-item"><span class="ap" style="font-size:7px">C</span>Coaching</div>
+        <div class="drill-legend-item"><span class="ap" style="font-size:7px">I</span>Inspection</div>
+        <div class="drill-legend-item"><span class="ap" style="font-size:7px">N</span>Nudges</div>
+        <div class="drill-legend-item"><span class="ap" style="font-size:7px">A</span>Adoption</div>
+        <div class="drill-legend-item"><span class="ap" style="font-size:7px">D</span>Deal Assist</div>
+      </div>
+    </div>
+
+    <!-- ── ENTERPRISE SALES DRILL-DOWN ── -->
+    <div class="drill-segment enterprise reveal">
+      <div class="drill-seg-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="seg-dot" style="background:var(--enterprise)"></div>
+          <div class="seg-title" style="color:var(--enterprise)">Enterprise Sales</div>
+        </div>
+        <div class="seg-meta">FLMs: 4 &rarr; 9 | SLMs: 2 &rarr; 3 | AEs: ~32 &rarr; 45 | GVP: Enterprise</div>
+      </div>
+
+      <!-- Current Team -->
+      <div class="drill-region">
+        <div class="drill-region-header">
+          <div class="drill-region-badge" style="background:rgba(168,85,247,0.10);color:var(--enterprise);border:1px solid var(--enterprise-border)">Current</div>
+          <div class="drill-region-meta">Existing team &middot; ~32 AEs &middot; 2 SLMs</div>
+        </div>
+        <div class="drill-flm-grid">
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 1</div><div class="drill-flm-meta">~8 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 2</div><div class="drill-flm-meta">~8 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--gap)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 3</div><div class="drill-flm-meta">~8 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--vault)"></span><span class="cd" style="background:var(--gap)"></span><span class="cd" style="background:var(--text-dim)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+          <div class="drill-flm"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 4</div><div class="drill-flm-meta">~8 AEs</div><div class="cond-dots"><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--done)"></span><span class="cd" style="background:var(--action)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap">D</span></div></div>
+        </div>
+      </div>
+
+      <!-- Incoming -->
+      <div class="drill-region">
+        <div class="drill-region-header">
+          <div class="drill-region-badge" style="background:rgba(168,85,247,0.10);color:var(--enterprise);border:1px solid var(--enterprise-border)">Incoming</div>
+          <div class="drill-region-meta">+5 new FLMs &middot; need day-one tooling &middot; SmartSheet transition</div>
+        </div>
+        <div class="drill-flm-grid">
+          <div class="drill-flm incoming"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 5</div><div class="drill-flm-meta">new hire</div><div class="cond-dots"><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap" style="background:rgba(251,191,36,0.10);border-color:rgba(251,191,36,0.22);color:var(--onboard)">O</span><span class="ap">D</span></div></div>
+          <div class="drill-flm incoming"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 6</div><div class="drill-flm-meta">new hire</div><div class="cond-dots"><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap" style="background:rgba(251,191,36,0.10);border-color:rgba(251,191,36,0.22);color:var(--onboard)">O</span><span class="ap">D</span></div></div>
+          <div class="drill-flm incoming"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 7</div><div class="drill-flm-meta">new hire</div><div class="cond-dots"><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap" style="background:rgba(251,191,36,0.10);border-color:rgba(251,191,36,0.22);color:var(--onboard)">O</span><span class="ap">D</span></div></div>
+          <div class="drill-flm incoming"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 8</div><div class="drill-flm-meta">new hire</div><div class="cond-dots"><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap" style="background:rgba(251,191,36,0.10);border-color:rgba(251,191,36,0.22);color:var(--onboard)">O</span><span class="ap">D</span></div></div>
+          <div class="drill-flm incoming"><div class="drill-flm-icon">&#x1F464;</div><div class="drill-flm-name">FLM 9</div><div class="drill-flm-meta">new hire</div><div class="cond-dots"><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span><span class="cd" style="background:var(--text-dim)"></span></div><div class="agent-pips"><span class="ap">C</span><span class="ap">I</span><span class="ap">N</span><span class="ap">A</span><span class="ap" style="background:rgba(251,191,36,0.10);border-color:rgba(251,191,36,0.22);color:var(--onboard)">O</span><span class="ap">D</span></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ THE COMPOUND EFFECT ═══ -->
+  <div class="crescendo reveal">
+    <div class="crescendo-eyebrow">The Compound Effect</div>
+    <div class="crescendo-eq">
+      <div class="crescendo-term">
+        <div class="crescendo-term-lbl" style="color:var(--text-muted)">Human Intelligence</div>
+        <div class="crescendo-term-val">26 FLMs</div>
+        <div class="crescendo-term-sub">managing 148 reps</div>
+      </div>
+      <div class="crescendo-op">&times;</div>
+      <div class="crescendo-term">
+        <div class="crescendo-term-lbl" style="color:var(--action)">AI Agents per Person</div>
+        <div class="crescendo-term-val" style="color:var(--action)">5&ndash;6</div>
+        <div class="crescendo-term-sub">coaching, inspection, nudges, adoption, deal assist</div>
+      </div>
+      <div class="crescendo-op">=</div>
+      <div class="crescendo-term" style="border-color:var(--action-border); background:var(--action-bg)">
+        <div class="crescendo-term-lbl" style="color:var(--action)">Applied Value</div>
+        <div class="crescendo-term-val" style="color:var(--action)">Every Individual</div>
+        <div class="crescendo-term-sub">instrumented, visible, actionable</div>
+      </div>
+    </div>
+    <div class="crescendo-result">Not one person falls through the cracks. Not one deal goes uninspected. Not one gap stays invisible.</div>
+    <div class="crescendo-grid">
+      <div class="crescendo-stat">
+        <div class="crescendo-stat-val">~150+</div>
+        <div class="crescendo-stat-lbl">Individual condition reports &mdash; live</div>
+      </div>
+      <div class="crescendo-stat">
+        <div class="crescendo-stat-val">130+</div>
+        <div class="crescendo-stat-lbl">AI agents deployed across the field</div>
+      </div>
+      <div class="crescendo-stat">
+        <div class="crescendo-stat-val">Every 1:1</div>
+        <div class="crescendo-stat-lbl">Pre-loaded with call data &amp; coaching intel</div>
+      </div>
+      <div class="crescendo-stat">
+        <div class="crescendo-stat-val">Week 1</div>
+        <div class="crescendo-stat-lbl">New FLMs get full condition visibility</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ENTERPRISE CALLOUT ═══ -->
+  <div class="s6-callout reveal">
+    <div class="co-title-text">Why Enterprise needs this now &mdash; not next quarter</div>
+    <div class="co-body">Five new FLMs are arriving with SmartSheet muscle memory into a radically different motion. Without the action layer, that's a 9-month "figure it out" ramp. With it, coaching cadence, deal inspection, and pipeline standards are embedded in day-one tooling. Individual condition visibility starts in week one &mdash; not after the first missed quarter.</div>
+  </div>
+
+  <!-- ═══ FEEDBACK LOOP ═══ -->
+  <div class="s6-feedback reveal">
+    <div class="fl-title">Continuous Feedback Loop</div>
+    <div class="fl-steps">
+      <div class="fl-step"><strong>Vault Signals</strong></div>
+      <div class="fl-arrow">&rarr;</div>
+      <div class="fl-step"><strong>Action Layer</strong> intervenes</div>
+      <div class="fl-arrow">&rarr;</div>
+      <div class="fl-step"><strong>Behavior Shifts</strong></div>
+      <div class="fl-arrow">&rarr;</div>
+      <div class="fl-step"><strong>Outcomes Move</strong></div>
+      <div class="fl-arrow">&rarr;</div>
+      <div class="fl-step" style="color:var(--action)"><strong>Vault Updates</strong></div>
+    </div>
+  </div>
+
+  <div class="s6-footer">
+    GTM Performance &amp; Productivity &mdash; The Action Layer &nbsp;|&nbsp; Individual Condition &times; Timely Intervention = Changed Outcomes
+  </div>
+
+</div>
+</div>
+
+<footer class="global-footer">
+  <p>GTM PERFORMANCE &amp; PRODUCTIVITY<br>2026</p>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+<script>
+const hamburger=document.getElementById('hamburgerBtn'),overlay=document.getElementById('chapterOverlay');
+hamburger.addEventListener('click',()=>{hamburger.classList.toggle('open');overlay.classList.toggle('open');document.body.style.overflow=overlay.classList.contains('open')?'hidden':'';});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open')){hamburger.classList.remove('open');overlay.classList.remove('open');document.body.style.overflow='';}});
+overlay.addEventListener('click',e=>{if(e.target===overlay){hamburger.classList.remove('open');overlay.classList.remove('open');document.body.style.overflow='';}});
+</script>
+
+</body>
+</html>
