@@ -396,9 +396,9 @@ const FN_CIRC_SUB=2*Math.PI*6.5; // 40.84 for sub pips
 
 function getBeatDur(b){
   let d=(b.dur||0)+(b.autoRotDur||0)+(b.holdTime||0);
-  if(b.special==='vaultRoom')d=20;
+  if(b.special==='vaultRoom')d=12;
   if(b.special==='drone')d=8+(b.dur||0);
-  if(b.special==='scoreboardDrill')d=8+(b.dur||0);
+  if(b.special==='scoreboardDrill')d=5+(b.dur||0);
   if(d<1)d=5;
   return d;
 }
@@ -480,7 +480,7 @@ function updateFlybyNav(){
   if(timerEl)timerEl.textContent=fmtTime(totalRemain);
 }
 const STORYBOARD_BEATS=[
-  {name:'FLYOVER',targetY:0,r:220,phi:1.05,theta:0.4,dur:3,autoRot:true,autoRotDur:4,holdTime:0.5},
+  {name:'FLYOVER',targetY:0,r:220,phi:1.05,theta:0.4,dur:3,autoRot:true,autoRotDur:0,holdTime:0},
   {name:'CONTRIBUTORS',targetY:60,r:90,phi:0.15,theta:0.0,dur:2,autoRot:false,holdTime:0},
   {name:'HORIZON FLYBY',targetY:60,r:28,phi:1.2,theta:0.0,dur:2,autoRot:true,autoRotDur:8,holdTime:0,onEnter:'showVault',onExit:'hideVault'},
   {name:'\u21B3 INDIVIDUALS',targetY:60,r:2,phi:0.8,theta:0.0,dur:0.01,autoRot:false,holdTime:0,special:'vaultRoom',onEnter:'enterVaultRoom',onExit:'exitVaultRoom'},
@@ -488,7 +488,7 @@ const STORYBOARD_BEATS=[
   {name:'PRODUCT BELOW',targetY:0,r:50,phi:2.85,theta:0.5,dur:3,autoRot:false,holdTime:1.5},
   {name:'AGENT OVERVIEW',targetY:-65,r:80,phi:0.75,theta:0.6,dur:4,autoRot:true,autoRotDur:5,holdTime:1},
   {name:'DRONE FLYTHROUGH',targetY:-63,r:15,phi:1.45,theta:0.0,dur:2,autoRot:false,holdTime:0,special:'drone'},
-  {name:'SCOREBOARD',targetY:0,r:160,phi:1.0,theta:0.0,dur:5,autoRot:false,holdTime:0,special:'scoreboardDrill',onEnter:'showScoreboard',onExit:null},
+  {name:'SCOREBOARD',targetY:0,r:160,phi:1.35,theta:0.0,dur:3,autoRot:false,holdTime:0,special:'scoreboardDrill',onEnter:'showScoreboard',onExit:null},
   {name:'SUMMARY',targetY:0,r:220,phi:1.05,theta:0.4,dur:5,autoRot:false,holdTime:0,onEnter:'showOutroCTA',onExit:null},
 ];
 function advanceBeat(){
@@ -2982,7 +2982,7 @@ function animate(){
         if(vaultPhase==='free'){
           beat._activated=false;
           // Auto-exit after a brief free-look period
-          if(beatTimer>20){exitVaultRoom();beatPhase='holding';beatTimer=0}
+          if(beatTimer>12){exitVaultRoom();beatPhase='holding';beatTimer=0}
         }
       } else if(beat.special==='drone'){
         // Drone flythrough along CatmullRom spline
@@ -2993,22 +2993,22 @@ function animate(){
         camera.position.copy(pos);camera.lookAt(lookAhead);
         if(progress>=1){beatPhase='holding';beatTimer=0}
       } else if(beat.special==='scoreboardDrill'){
-        // 3-phase zoom into scoreboard halo
-        const dur=8;const progress=Math.min(beatTimer/dur,1);
+        // 3-phase zoom into scoreboard halo — camera sits below equator looking up
+        const dur=5;const progress=Math.min(beatTimer/dur,1);
         if(progress<0.33){
-          // Phase A: orbit at r=160 showing full board (Macro)
+          // Phase A: orbit at r=160, below equator (Macro)
           const p=progress/0.33;
-          sph.r=160;sph.theta+=0.008;sph.phi=1.0;
+          sph.r=160;sph.theta+=0.008;sph.phi=1.35;
           lookTarget.y+=(0-lookTarget.y)*0.02;camUp();
         } else if(progress<0.66){
-          // Phase B: zoom to r=120 (Box Score)
+          // Phase B: zoom to r=120, rise slightly (Box Score)
           const p=(progress-0.33)/0.33;
-          sph.r=160-p*40;sph.theta+=0.006;sph.phi=1.0+p*0.15;
+          sph.r=160-p*40;sph.theta+=0.006;sph.phi=1.35+p*0.1;
           camUp();
         } else {
-          // Phase C: zoom to r=80 (All-22 detail)
+          // Phase C: zoom to r=90 (All-22 detail)
           const p=(progress-0.66)/0.34;
-          sph.r=120-p*40;sph.theta+=0.004;sph.phi=1.15-p*0.1;
+          sph.r=120-p*30;sph.theta+=0.004;sph.phi=1.45-p*0.08;
           camUp();
         }
         if(progress>=1){beatPhase='holding';beatTimer=0}
