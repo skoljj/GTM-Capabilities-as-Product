@@ -482,7 +482,7 @@ function updateFlybyNav(){
 const STORYBOARD_BEATS=[
   {name:'FLYOVER',targetY:0,r:220,phi:1.05,theta:0.4,dur:3,autoRot:true,autoRotDur:0,holdTime:0},
   {name:'CONTRIBUTORS',targetY:60,r:90,phi:0.15,theta:0.0,dur:2,autoRot:false,holdTime:0},
-  {name:'HORIZON FLYBY',targetY:60,r:28,phi:1.2,theta:0.0,dur:2,autoRot:true,autoRotDur:8,holdTime:0,onEnter:'showVault',onExit:'hideVault'},
+  {name:'HORIZON FLYBY',targetY:60,r:65,phi:1.2,theta:0.0,dur:2,autoRot:true,autoRotDur:8,holdTime:0,onEnter:'showVault',onExit:'hideVault'},
   {name:'\u21B3 INDIVIDUALS',targetY:60,r:2,phi:0.8,theta:0.0,dur:0.01,autoRot:false,holdTime:0,special:'vaultRoom',onEnter:'enterVaultRoom',onExit:'exitVaultRoom'},
   {name:'AI PRODUCT LAYER',targetY:0,r:65,phi:0.85,theta:0.0,dur:4,autoRot:true,autoRotDur:5,holdTime:1,onEnter:'showSidebars',onExit:'hideSidebars'},
   {name:'PRODUCT BELOW',targetY:0,r:50,phi:2.85,theta:0.5,dur:3,autoRot:false,holdTime:1.5},
@@ -827,7 +827,7 @@ CONT_ZONES.forEach(z=>{const d=DISTRICTS[z.di];
   // Push toward outer corner for corner districts, outer center for edge districts
   const bbX=isCorner?(z.cx>0?z.cx+z.w/2-1:z.cx-z.w/2+1):z.cx;
   const bbZ=z.cz<0?z.cz-z.d/2+1:z.cz+z.d/2-1;
-  const postH=7; // shorter post to accommodate vault cards below billboard
+  const postH=12; // taller post so billboard clears building tops during flyby
   const bbW=10,bbH=3.5; // billboard dimensions
   const dc16='#'+d.color.toString(16).padStart(6,'0');
   // Post — thin cylinder
@@ -952,7 +952,7 @@ CONT_ZONES.forEach(z=>{
   const isCorner=(z.cx!==0);
   const bbX=isCorner?(z.cx>0?z.cx+z.w/2-1:z.cx-z.w/2+1):z.cx;
   const bbZ=z.cz<0?z.cz-z.d/2+1:z.cz+z.d/2-1;
-  const cardsY=CONT_Y+6; // just beneath billboard (post=7, billboard starts at 7)
+  const cardsY=CONT_Y+11; // just beneath billboard (post=12, billboard starts at 12)
   const cardSpacing=2.8; // horizontal spacing between 4 cards
   // 4 domain cards in a row, centered under the billboard
   VAULT_COMPONENTS.forEach((vc,vi)=>{
