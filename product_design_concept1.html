@@ -396,9 +396,9 @@ const FN_CIRC_SUB=2*Math.PI*6.5; // 40.84 for sub pips
 
 function getBeatDur(b){
   let d=(b.dur||0)+(b.autoRotDur||0)+(b.holdTime||0);
-  if(b.special==='vaultRoom')d=12;
+  if(b.special==='vaultRoom')d=8;
   if(b.special==='drone')d=8+(b.dur||0);
-  if(b.special==='scoreboardDrill')d=5+(b.dur||0);
+  if(b.special==='scoreboardDrill')d=2+(b.dur||0);
   if(d<1)d=5;
   return d;
 }
@@ -482,10 +482,10 @@ function updateFlybyNav(){
 const STORYBOARD_BEATS=[
   {name:'FLYOVER',targetY:0,r:220,phi:1.05,theta:0.4,dur:3,autoRot:true,autoRotDur:0,holdTime:0},
   {name:'CONTRIBUTORS',targetY:60,r:90,phi:0.15,theta:0.0,dur:2,autoRot:false,holdTime:0},
-  {name:'HORIZON FLYBY',targetY:60,r:65,phi:1.2,theta:0.0,dur:2,autoRot:true,autoRotDur:8,holdTime:0,onEnter:'showVault',onExit:'hideVault'},
+  {name:'HORIZON FLYBY',targetY:60,r:65,phi:1.2,theta:0.0,dur:2,autoRot:true,autoRotDur:4,holdTime:0,onEnter:'showVault',onExit:'hideVault'},
   {name:'\u21B3 INDIVIDUALS',targetY:60,r:2,phi:0.8,theta:0.0,dur:0.01,autoRot:false,holdTime:0,special:'vaultRoom',onEnter:'enterVaultRoom',onExit:'exitVaultRoom'},
   {name:'AI PRODUCT LAYER',targetY:0,r:65,phi:0.85,theta:0.0,dur:4,autoRot:true,autoRotDur:5,holdTime:1,onEnter:'showSidebars',onExit:'hideSidebars'},
-  {name:'PRODUCT BELOW',targetY:0,r:50,phi:2.85,theta:0.5,dur:3,autoRot:false,holdTime:1.5},
+  {name:'PRODUCT BELOW',targetY:0,r:50,phi:2.85,theta:0.5,dur:1.5,autoRot:false,holdTime:0.75},
   {name:'AGENT OVERVIEW',targetY:-65,r:80,phi:0.75,theta:0.6,dur:4,autoRot:true,autoRotDur:5,holdTime:1},
   {name:'DRONE FLYTHROUGH',targetY:-63,r:15,phi:1.45,theta:0.0,dur:2,autoRot:false,holdTime:0,special:'drone'},
   {name:'SCOREBOARD',targetY:0,r:160,phi:1.35,theta:0.0,dur:3,autoRot:false,holdTime:0,special:'scoreboardDrill',onEnter:'showScoreboard',onExit:null},
@@ -2982,7 +2982,7 @@ function animate(){
         if(vaultPhase==='free'){
           beat._activated=false;
           // Auto-exit after a brief free-look period
-          if(beatTimer>12){exitVaultRoom();beatPhase='holding';beatTimer=0}
+          if(beatTimer>8){exitVaultRoom();beatPhase='holding';beatTimer=0}
         }
       } else if(beat.special==='drone'){
         // Drone flythrough along CatmullRom spline
@@ -2994,7 +2994,7 @@ function animate(){
         if(progress>=1){beatPhase='holding';beatTimer=0}
       } else if(beat.special==='scoreboardDrill'){
         // 3-phase zoom into scoreboard halo — camera sits below equator looking up
-        const dur=5;const progress=Math.min(beatTimer/dur,1);
+        const dur=2;const progress=Math.min(beatTimer/dur,1);
         if(progress<0.33){
           // Phase A: orbit at r=160, below equator (Macro)
           const p=progress/0.33;
