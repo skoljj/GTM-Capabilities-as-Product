@@ -125,23 +125,23 @@ canvas{position:fixed;top:0;left:0;z-index:0}
 #error-display{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#ff6b6b;font-family:monospace;font-size:13px;background:rgba(0,0,0,0.9);padding:30px;border:1px solid #ff6b6b;border-radius:8px;max-width:80%;white-space:pre-wrap;z-index:999}
 
 /* ── Product Layer Sidebars ── */
-.prod-sidebar{position:fixed;left:0;z-index:200;width:210px;transition:all 0.5s cubic-bezier(0.4,0,0.2,1);pointer-events:all;opacity:0;transform:translateX(-230px);backdrop-filter:blur(16px);border-right:1px solid rgba(255,255,255,0.06);border-radius:0 8px 8px 0}
+.prod-sidebar{position:fixed;left:0;z-index:200;width:190px;transition:all 0.5s cubic-bezier(0.4,0,0.2,1);pointer-events:all;opacity:0;transform:translateX(-210px);backdrop-filter:blur(16px);border-right:1px solid rgba(255,255,255,0.06);border-radius:0 8px 8px 0}
 .prod-sidebar.visible{opacity:1;transform:translateX(0)}
-.prod-sidebar.collapsed .sb-body{max-height:0;opacity:0;padding:0 14px;margin:0;overflow:hidden}
+.prod-sidebar.collapsed .sb-body{max-height:0;opacity:0;padding:0 10px;margin:0;overflow:hidden}
 .prod-sidebar.collapsed .sb-toggle-arrow{transform:rotate(180deg)}
-.sb-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;cursor:pointer;user-select:none}
-.sb-title{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600}
-.sb-sub{font-size:7px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.35;margin-top:1px}
-.sb-toggle-arrow{font-size:10px;transition:transform 0.3s;opacity:0.4}
-.sb-body{padding:4px 14px 14px;transition:all 0.4s ease;max-height:450px;opacity:1}
-.sb-item{display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.2s}
+.sb-header{display:flex;align-items:center;justify-content:space-between;padding:6px 10px 3px;cursor:pointer;user-select:none}
+.sb-title{font-size:8px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600}
+.sb-sub{font-size:6px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.35;margin-top:1px}
+.sb-toggle-arrow{font-size:9px;transition:transform 0.3s;opacity:0.4}
+.sb-body{padding:2px 10px 8px;transition:all 0.4s ease;max-height:300px;opacity:1}
+.sb-item{display:flex;align-items:center;gap:7px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.2s}
 .sb-item:last-child{border-bottom:none}
 .sb-item:hover{background:rgba(255,255,255,0.02);border-radius:4px;padding-left:4px}
-.sb-logo{width:28px;height:28px;border-radius:8px;object-fit:cover;flex-shrink:0;background:rgba(0,0,0,0.3)}
-.sb-logo.lg{width:36px;height:36px;border-radius:10px}
-.sb-item-info{display:flex;flex-direction:column;gap:1px}
-.sb-item-name{font-size:10px;font-weight:500;letter-spacing:0.04em}
-.sb-item-desc{font-size:7px;opacity:0.35;letter-spacing:0.06em;text-transform:uppercase}
+.sb-logo{width:22px;height:22px;border-radius:6px;object-fit:cover;flex-shrink:0;background:rgba(0,0,0,0.3)}
+.sb-logo.lg{width:26px;height:26px;border-radius:8px}
+.sb-item-info{display:flex;flex-direction:column;gap:0}
+.sb-item-name{font-size:9px;font-weight:500;letter-spacing:0.04em}
+.sb-item-desc{font-size:6px;opacity:0.35;letter-spacing:0.06em;text-transform:uppercase}
 .sb-glow{position:absolute;left:0;top:50%;width:3px;height:20px;transform:translateY(-50%);border-radius:0 2px 2px 0;opacity:0.6}
 #sb-api{top:56px;background:rgba(4,12,20,0.92)}
 #sb-code{top:56px;background:rgba(4,10,18,0.92)}
@@ -257,14 +257,13 @@ canvas{position:fixed;top:0;left:0;z-index:0}
   </div>
 </div>
 <div id="stats-bar">
-  <div class="stat"><div class="stat-dot" style="background:#00e5a0"></div><span class="stat-label">Buildings</span><span class="stat-value">38</span></div>
+  <div class="stat"><div class="stat-dot" style="background:#00e5ff"></div><span class="stat-label">Orgs</span><span class="stat-value">6</span></div>
+  <div class="stat"><div class="stat-dot" style="background:#c77dff"></div><span class="stat-label">SLMs</span><span class="stat-value">9</span></div>
+  <div class="stat"><div class="stat-dot" style="background:#f4a623"></div><span class="stat-label">FLMs</span><span class="stat-value">38</span></div>
   <div class="stat"><div class="stat-dot" style="background:#6366f1"></div><span class="stat-label">ICs</span><span class="stat-value">220</span></div>
-  <div class="stat"><div class="stat-dot" style="background:#c77dff"></div><span class="stat-label">Product</span><span class="stat-value">DISC</span></div>
-  <div class="stat"><div class="stat-dot" style="background:#7B68EE"></div><span class="stat-label">MCP</span><span class="stat-value">4</span></div>
-  <div class="stat"><div class="stat-dot" style="background:#10a37f"></div><span class="stat-label">APIs</span><span class="stat-value">5</span></div>
-  <div class="stat"><div class="stat-dot" style="background:#f4a623"></div><span class="stat-label">Agent Tiles</span><span class="stat-value">6</span></div>
+  <div class="stat"><div class="stat-dot" style="background:#00e5a0"></div><span class="stat-label">Agent Orgs</span><span class="stat-value">6</span></div>
   <div class="stat"><div class="stat-dot" style="background:#e63946"></div><span class="stat-label">Super Agents</span><span class="stat-value">30</span></div>
-  <div class="stat"><div class="stat-dot" style="background:#00e5ff"></div><span class="stat-label">Data Centers</span><span class="stat-value">6</span></div>
+  <div class="stat"><div class="stat-dot" style="background:#10a37f"></div><span class="stat-label">Agents</span><span class="stat-value">3,450</span></div>
 </div>
 <!-- skip-intro and beat-counter replaced by flyby-nav controls -->
 <div id="outro-cta" class="full"><a href="chapters/index.html" target="_top">Explore Chapters &rarr;</a><div class="cta-sub">Deep-dive into the framework, architecture &amp; action layer</div><button class="cta-minimize" onclick="snoozeCTA()">&minus;</button><button class="cta-expand" onclick="expandCTA()">&#x2197;</button></div>
@@ -579,8 +578,8 @@ window.goToView=function(idx){
 
 function stackSidebars(){
   const panels=['sb-api','sb-code','sb-mcp'];
-  let y=120; // below PRODUCT LAYER / FLYOVER heading
-  const gap=12; // extra breathing room between panels
+  let y=110; // below PRODUCT LAYER / FLYOVER heading
+  const gap=6; // compact breathing room between panels
   panels.forEach(id=>{
     const el=document.getElementById(id);
     el.style.top=y+'px';
