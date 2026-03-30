@@ -352,7 +352,7 @@ const VIEWS=[
   {name:'\u21B3 INDIVIDUALS',color:'#818cf8',targetY:60,r:2,phi:0.8,theta:0.0,special:'vaultRoom'},
   {name:'AI PRODUCT LAYER',color:'#c77dff',targetY:0,r:65,phi:0.85,theta:0.0},
   {name:'AGENT UNIVERSE',color:'#f4a623',targetY:-65,r:80,phi:0.75,theta:0.6},
-  {name:'SCOREBOARD',color:'#00e5ff',targetY:0,r:160,phi:1.0,theta:0.0},
+  {name:'SCOREBOARD',color:'#34d399',targetY:0,r:160,phi:1.0,theta:0.0},
   {name:'SUMMARY',color:'#88aacc',targetY:0,r:220,phi:1.05,theta:0.4},
 ];
 let currentView=0,targetView={...VIEWS[0]},isTransitioning=false;
@@ -2526,7 +2526,7 @@ _hemiFaces.forEach(face=>{
   function statusCol(val,goal){
     if(!goal)return'#34d399';
     const v=parseFloat(val),g=parseFloat(goal);if(isNaN(v)||isNaN(g))return'#f4a623';
-    const pct=v/g;return pct>=0.95?'#34d399':pct>=0.8?'#f4a623':'#fbbf24';
+    const pct=v/g;return pct>=0.95?'#34d399':pct>=0.8?'#f4a623':'#e63946';
   }
 
   // No rectangular card — content paints directly onto the polygon face
@@ -2575,7 +2575,7 @@ _hemiFaces.forEach(face=>{
         // Value + trend
         lx.globalAlpha=1;lx.font='bold 32px monospace';lx.fillStyle='#ffffff';
         lx.fillText(nk.v,nx,stripY+58);
-        lx.globalAlpha=0.8;lx.font='bold 20px monospace';lx.fillStyle=nUp?'#34d399':'#fbbf24';
+        lx.globalAlpha=0.8;lx.font='bold 20px monospace';lx.fillStyle=nUp?'#34d399':'#e63946';
         lx.fillText(nUp?'▲'+nPct+'%':'▼'+nPct+'%',nx+nw-20,stripY+58);
         // Mini sparkline
         drawSpark(lx,nx,stripY+68,nw,40,nk.t,sec.color);
@@ -2634,7 +2634,7 @@ _hemiFaces.forEach(face=>{
     }
     // Overall attainment summary
     const avgAttain=Math.round(bars.reduce((s,b)=>s+b.attain,0)/bars.length*100);
-    const avgCol=avgAttain>=95?'#34d399':avgAttain>=80?'#f4a623':'#fbbf24';
+    const avgCol=avgAttain>=95?'#34d399':avgAttain>=80?'#f4a623':'#e63946';
     lx.globalAlpha=0.7;lx.font='bold 24px monospace';lx.fillStyle=avgCol;lx.textAlign='right';
     lx.fillText('AVG '+avgAttain+'%',cw-32,ch-20);
   } else if(hasDetail){
@@ -2652,7 +2652,7 @@ _hemiFaces.forEach(face=>{
     lx.globalAlpha=1;lx.font='bold 80px monospace';lx.fillStyle='#ffffff';
     lx.fillText(kpi.v,32,170);
     // Trend
-    lx.font='bold 40px monospace';lx.fillStyle=up?'#34d399':'#fbbf24';lx.textAlign='right';
+    lx.font='bold 40px monospace';lx.fillStyle=up?'#34d399':'#e63946';lx.textAlign='right';
     lx.fillText((up?'▲ +':'▼ ')+pct+'%',cw-32,165);
     // Period label
     lx.globalAlpha=0.3;lx.font='400 20px monospace';lx.fillStyle='#c8d6e5';
@@ -2713,9 +2713,9 @@ _hemiFaces.forEach(face=>{
       const barY=ch-24;const barW=cw-64;
       lx.globalAlpha=0.6;lx.fillStyle='#34d399';lx.fillRect(32,barY,barW*greenPct/100,12);
       lx.fillStyle='#f4a623';lx.fillRect(32+barW*greenPct/100,barY,barW*amberPct/100,12);
-      lx.fillStyle='#fbbf24';lx.fillRect(32+barW*(greenPct+amberPct)/100,barY,barW*redPct/100,12);
+      lx.fillStyle='#e63946';lx.fillRect(32+barW*(greenPct+amberPct)/100,barY,barW*redPct/100,12);
       lx.globalAlpha=0.5;lx.font='400 12px monospace';lx.fillStyle='#c8d6e5';lx.textAlign='center';
-      lx.fillText(greenPct+'% ON TRACK   '+amberPct+'% PACING   '+redPct+'% BUILDING',cw/2,barY-4);
+      lx.fillText(greenPct+'% ON TRACK   '+amberPct+'% AT RISK   '+redPct+'% BEHIND',cw/2,barY-4);
     } else {
       // Non-roster overflow
       lx.globalAlpha=1;lx.font='bold 40px monospace';lx.fillStyle=sec.color;lx.textAlign='center';
