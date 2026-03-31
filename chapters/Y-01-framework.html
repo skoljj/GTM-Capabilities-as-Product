@@ -576,28 +576,59 @@ footer p{
 <!-- ═══ HERO - THE FORMULA (combined) ═══ -->
 <section class="hero" id="formula">
 
-  <!-- PRIMARY: glass-morphic equation (original SVG) -->
-  <div class="formula-diagram" style="animation:fadeUp .7s ease .15s both">
-    <div class="formula-diagram-tag">A framework for compounding intelligence</div>
-    <div style="width:100%;max-width:920px;padding:0 16px">
-      <img src="../applied HI ^ applied AI = actual V_files/formula-hero.svg" alt="applied HI ^ applied AI = actual V" style="width:100%;height:auto;display:block">
+  <div class="formula-diagram-tag" style="animation:fadeUp .7s ease .1s both">A framework for compounding intelligence</div>
+
+  <!-- INTEGRATED: tiles + text as one composition -->
+  <div style="display:flex;align-items:center;justify-content:center;gap:clamp(12px,2.5vw,32px);margin-top:32px;flex-wrap:nowrap;animation:fadeUp .7s ease .2s both;width:100%;max-width:960px;padding:0 16px">
+
+    <!-- HI tile + label -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px;flex:1;max-width:280px">
+      <div style="width:100%;aspect-ratio:556/497;max-width:220px;position:relative;overflow:hidden">
+        <img src="../applied HI ^ applied AI = actual V_files/formula-hero.svg" alt="applied HI ^ applied AI = actual V" style="position:absolute;top:0;left:0;width:310%;height:auto;transform:translateX(-7%) translateY(-33%)">
+      </div>
+      <div style="text-align:center">
+        <div style="font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,26px);font-weight:400;color:var(--text-mid);line-height:1.3"><em style="color:var(--accent)">applied</em> Human<br>Intelligence</div>
+      </div>
     </div>
-    <div class="formula-diagram-sub">Human quotient &times; AI quotient = Real outcome</div>
+
+    <!-- ^ operator -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;padding-bottom:60px">
+      <div style="font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,42px);color:var(--text-mid);font-weight:300;opacity:0.7">^</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:clamp(5px,0.6vw,7px);letter-spacing:.12em;color:var(--dim);text-transform:uppercase;text-align:center;line-height:1.5;white-space:nowrap">RAISED TO<br>THE POWER OF</div>
+    </div>
+
+    <!-- AI tile + label -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px;flex:1;max-width:280px">
+      <div style="width:100%;aspect-ratio:556/497;max-width:240px;position:relative;overflow:hidden">
+        <img src="../applied HI ^ applied AI = actual V_files/formula-hero.svg" alt="" style="position:absolute;top:0;left:0;width:310%;height:auto;transform:translateX(-39.5%) translateY(0%)">
+      </div>
+      <div style="text-align:center">
+        <div style="font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,26px);font-weight:400;color:var(--text-mid);line-height:1.3"><em style="color:var(--accent)">applied</em> Artificial<br>Intelligence</div>
+      </div>
+    </div>
+
+    <!-- = operator -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;padding-bottom:60px">
+      <div style="font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,42px);color:var(--text-mid);font-weight:300;opacity:0.7">=</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:clamp(5px,0.6vw,7px);letter-spacing:.12em;color:var(--dim);text-transform:uppercase">EQUALS</div>
+    </div>
+
+    <!-- V tile + label -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px;flex:1;max-width:280px">
+      <div style="width:100%;aspect-ratio:556/497;max-width:220px;position:relative;overflow:hidden">
+        <img src="../applied HI ^ applied AI = actual V_files/formula-hero.svg" alt="" style="position:absolute;top:0;left:0;width:310%;height:auto;transform:translateX(-72%) translateY(-17%)">
+      </div>
+      <div style="text-align:center">
+        <div style="font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,26px);font-weight:400;color:var(--text-mid);line-height:1.3"><em style="color:var(--accent)">actual</em><br>Value</div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- SECONDARY: expanded formula text -->
-  <div style="margin-top:56px;text-align:center;max-width:720px;animation:fadeUp .7s ease .45s both">
-    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(20px,2.6vw,34px);font-weight:400;line-height:1.35;color:var(--text-mid)">
-      <em style="color:var(--accent)">applied</em> Human Intelligence<br>
-      <span style="font-size:.55em;color:var(--dim);font-family:'IBM Plex Mono',monospace;letter-spacing:.1em">RAISED TO THE POWER OF</span><br>
-      <em style="color:var(--accent)">applied</em> Artificial Intelligence<br>
-      <span style="font-size:.55em;color:var(--dim);font-family:'IBM Plex Mono',monospace;letter-spacing:.1em">EQUALS</span><br>
-      <em style="color:var(--accent)">actual</em> Value
-    </h2>
-  </div>
+  <div style="margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;text-align:center;animation:fadeUp .7s ease .35s both">Human quotient &times; AI quotient = Real outcome</div>
 
-  <!-- TERTIARY: explanation -->
-  <p style="margin-top:24px;font-size:18px;color:var(--gray);max-width:800px;text-align:center;line-height:1.75;animation:fadeUp .7s ease .6s both">
+  <!-- EXPLANATION -->
+  <p style="margin-top:40px;font-size:18px;color:var(--gray);max-width:800px;text-align:center;line-height:1.75;animation:fadeUp .7s ease .5s both">
     This isn't addition. It's exponentiation. The quality of human input sets the base. The sophistication of AI application sets the exponent. Together they produce value that neither achieves alone, and the gap between linear and exponential is where real outcomes live.
   </p>
 
