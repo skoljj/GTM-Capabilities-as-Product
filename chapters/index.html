@@ -131,28 +131,30 @@ body {
 
 /* ═══ SECTION TRANSITIONS ═══ */
 .section-transition {
-  position: relative; height: 140px;
-  display: flex; align-items: center; justify-content: center;
+  position: relative; height: 80px;
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 0 clamp(24px,5vw,64px);
+  max-width: 960px; margin: 0 auto;
 }
 .section-transition::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(180deg, var(--bg) 0%, rgba(255,255,255,0.012) 50%, var(--bg) 100%);
+  content: ''; position: absolute; left: 0; right: 0; top: 50%;
+  height: 1px; background: rgba(255,255,255,0.04);
 }
 .section-transition-inner {
   position: relative; z-index: 1;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  display: flex; align-items: baseline; gap: 10px;
 }
 .section-transition-num {
-  font-family: 'IBM Plex Mono', monospace; font-size: 9px;
-  letter-spacing: .3em; text-transform: uppercase; color: var(--text-dim);
+  font-family: 'IBM Plex Mono', monospace; font-size: 8px;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--dim);
 }
 .section-transition-title {
-  font-family: 'Instrument Serif', serif; font-size: 20px;
-  font-weight: 400; color: var(--text-mid); font-style: italic;
+  font-family: 'Instrument Serif', serif; font-size: 15px;
+  font-weight: 400; color: var(--text-dim); font-style: italic;
 }
 .section-transition-line {
-  width: 1px; height: 24px;
-  background: linear-gradient(to bottom, var(--text-dim), transparent); opacity: 0.4;
+  display: none; width: 0; height: 0;
+  background: transparent;
 }
 
 /* ═══ GLOBAL REVEAL ═══ */
@@ -205,28 +207,30 @@ body {
 
 /* ═══ SECTION TRANSITIONS ═══ */
 .section-transition {
-  position: relative; height: 140px;
-  display: flex; align-items: center; justify-content: center;
+  position: relative; height: 80px;
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 0 clamp(24px,5vw,64px);
+  max-width: 960px; margin: 0 auto;
 }
 .section-transition::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(180deg, var(--bg) 0%, rgba(255,255,255,0.012) 50%, var(--bg) 100%);
+  content: ''; position: absolute; left: 0; right: 0; top: 50%;
+  height: 1px; background: rgba(255,255,255,0.04);
 }
 .section-transition-inner {
   position: relative; z-index: 1;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  display: flex; align-items: baseline; gap: 10px;
 }
 .section-transition-num {
-  font-family: 'IBM Plex Mono', monospace; font-size: 9px;
-  letter-spacing: .3em; text-transform: uppercase; color: var(--text-dim);
+  font-family: 'IBM Plex Mono', monospace; font-size: 8px;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--dim);
 }
 .section-transition-title {
-  font-family: 'Instrument Serif', serif; font-size: 20px;
-  font-weight: 400; color: var(--text-mid); font-style: italic;
+  font-family: 'Instrument Serif', serif; font-size: 15px;
+  font-weight: 400; color: var(--text-dim); font-style: italic;
 }
 .section-transition-line {
-  width: 40px; height: 1px;
-  background: rgba(0,229,255,.3);
+  display: none; width: 0; height: 0;
+  background: transparent;
 }
 
 /* ═══ GLOBAL REVEAL ═══ */
