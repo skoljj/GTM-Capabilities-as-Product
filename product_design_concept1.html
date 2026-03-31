@@ -10,7 +10,7 @@ body{background:#020408;overflow-x:hidden;font-family:'SF Pro Display',system-ui
 canvas{position:fixed;top:0;left:0;z-index:0}
 
 /* ── Unified Flyby Nav ── */
-#flyby-nav{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;align-items:flex-end;gap:0}
+#flyby-nav{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;align-items:flex-end;gap:0;padding:12px 14px 12px 20px;background:linear-gradient(270deg,rgba(4,8,16,0.7) 0%,rgba(4,8,16,0.4) 60%,transparent 100%);border-radius:8px 0 0 8px}
 #flyby-timer{text-align:right;margin-bottom:12px;padding:6px 10px;background:rgba(8,12,24,0.7);border:1px solid rgba(0,229,255,0.1);border-radius:5px;backdrop-filter:blur(8px)}
 #flyby-time-label{font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(0,229,255,0.3);font-family:'SF Pro Display',system-ui,sans-serif}
 #flyby-time-val{font-size:14px;font-family:monospace;color:rgba(0,229,255,0.55);letter-spacing:0.06em;margin-top:1px}
@@ -19,15 +19,15 @@ canvas{position:fixed;top:0;left:0;z-index:0}
 .fn-pip.sub{margin-right:8px}
 .fn-ring{width:22px;height:22px;flex-shrink:0}
 .fn-pip.sub .fn-ring{width:16px;height:16px}
-.fn-ring circle.fn-track{fill:none;stroke:rgba(0,229,255,0.1);stroke-width:2}
+.fn-ring circle.fn-track{fill:none;stroke:rgba(0,229,255,0.25);stroke-width:2}
 .fn-ring circle.fn-fill{fill:none;stroke:rgba(0,229,255,0.6);stroke-width:2;stroke-dasharray:56.55;stroke-dashoffset:56.55;transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset 0.4s ease}
 .fn-pip.sub .fn-ring circle.fn-fill{stroke-dasharray:40.84;stroke-dashoffset:40.84}
 .fn-pip.active .fn-ring circle.fn-fill{stroke:rgba(0,229,255,1);filter:drop-shadow(0 0 4px rgba(0,229,255,0.4))}
 .fn-pip.complete .fn-ring circle.fn-fill{stroke-dashoffset:0!important;stroke:rgba(0,229,255,0.35)}
-.fn-label{font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(0,229,255,0.2);white-space:nowrap;transition:color 0.3s;font-family:'SF Pro Display',system-ui,sans-serif;font-weight:300}
-.fn-pip:hover .fn-label{color:rgba(0,229,255,0.6)}
-.fn-pip.active .fn-label{color:rgba(0,229,255,0.55)}
-.fn-pip.complete .fn-label{color:rgba(0,229,255,0.2)}
+.fn-label{font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(0,229,255,0.5);white-space:nowrap;transition:color 0.3s;font-family:'SF Pro Display',system-ui,sans-serif;font-weight:400}
+.fn-pip:hover .fn-label{color:rgba(0,229,255,0.85)}
+.fn-pip.active .fn-label{color:rgba(0,229,255,0.9)}
+.fn-pip.complete .fn-label{color:rgba(0,229,255,0.4)}
 .fn-seg-time{position:absolute;left:-36px;top:50%;transform:translateY(-50%);font-size:8px;font-family:monospace;color:rgba(0,229,255,0.3);opacity:0;transition:opacity 0.3s}
 .fn-pip.active .fn-seg-time{opacity:1}
 #flyby-controls{display:flex;gap:6px;margin-top:10px;align-self:flex-end}
