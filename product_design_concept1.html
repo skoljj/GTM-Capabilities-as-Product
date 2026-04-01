@@ -618,8 +618,6 @@ window.goToView=function(idx){
   // If leaving vault room, exit it first
   if(vaultActive&&idx!==2)exitVaultRoom();
   currentView=idx;const v=VIEWS[idx];
-  targetView={targetY:v.targetY,r:v.r,phi:v.phi,theta:v.theta};
-  isTransitioning=true;
   autoRotating=false;
   productBelowAnim=false;
   idleZooming=false;
@@ -630,10 +628,14 @@ window.goToView=function(idx){
     // Force-reset vault state so re-entry always works
     vaultActive=false;
     vaultPhase='off';
+    // Don't move main camera — go straight to blackout + vault
     const bo=document.getElementById('vault-blackout');
     bo.style.transition='opacity 0.1s';
     bo.classList.add('active');
     setTimeout(function(){enterVaultRoom()},120);
+  } else {
+    targetView={targetY:v.targetY,r:v.r,phi:v.phi,theta:v.theta};
+    isTransitioning=true;
   }
   document.getElementById('layer-name').textContent=v.name;
   document.getElementById('layer-name').style.color=v.color;
