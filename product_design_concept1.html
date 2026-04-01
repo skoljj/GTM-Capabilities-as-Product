@@ -633,7 +633,9 @@ window.goToView=function(idx){
     _vaultExitId++;
     vaultActive=false;
     vaultPhase='off';
+    console.log('[VAULT] goToView(2): calling enterVaultRoom, vaultActive before=',vaultActive);
     enterVaultRoom();
+    console.log('[VAULT] goToView(2): after enterVaultRoom, vaultActive=',vaultActive,'vaultPhase=',vaultPhase);
   } else {
     targetView={targetY:v.targetY,r:v.r,phi:v.phi,theta:v.theta};
     isTransitioning=true;
@@ -1387,7 +1389,8 @@ function vaultCamFromSph(){
 }
 
 window.enterVaultRoom=function(){
-  if(vaultActive)return;
+  console.log('[VAULT] enterVaultRoom called, vaultActive=',vaultActive);
+  if(vaultActive){console.log('[VAULT] BLOCKED - vaultActive already true');return;}
   vaultActive=true;
   vaultPhase='touring';
   vaultTimer=0;
@@ -3289,6 +3292,7 @@ function animate(){
   // Knowledge Vault panel hover animation
   if(vaultGroup.visible){vaultGroup.children.forEach(m=>{m.position.y=m.userData.baseY+Math.sin(t*0.8+m.userData.phase)*0.3})}
   // ── VAULT ROOM (separate scene) ──
+  if(!vaultActive&&currentView===2){document.title='BUG: view=2 but vaultActive=false phase='+vaultPhase}
   if(vaultActive){
     // Animate wall contents
     vaultRoomGroup.children.forEach(child=>{
