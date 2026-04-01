@@ -570,14 +570,11 @@ function interruptCinematic(){
   if(!cinematicMode)return;
   cinematicMode=false;cinematicPaused=false;storyboardComplete=true;
   // If inside vault room during interrupt, exit cleanly
-  if(vaultActive){_vaultExitId++;vaultActive=false;vaultPhase='off';document.getElementById('vault-blackout').style.opacity='0'}
+  if(vaultActive){_vaultExitId++;vaultActive=false;vaultPhase='off';var bo=document.getElementById('vault-blackout');bo.style.transition='none';bo.style.opacity='0'}
   window.hideVault&&hideVault();window.hideScoreboard&&hideScoreboard();
   showManualControls();
-  // Set currentView to closest match for current camera position
-  const camY=lookTarget.y;
-  if(camY>40)currentView=1; // Contributors
-  else if(camY>-30)currentView=3; // AI Product Layer
-  else currentView=4; // Agent Universe
+  // Start manual navigation from Flyover (view 0) so user scrolls through every layer
+  currentView=0;
 }
 function showManualControls(){
   // Hide cinematic controls, keep nav visible in manual mode
@@ -1394,19 +1391,20 @@ window.enterVaultRoom=function(){
   vaultActive=true;
   vaultPhase='touring';
   vaultTimer=0;
-  // Quick blackout then reveal once vault camera is positioned inside
-  const bo=document.getElementById('vault-blackout');
+  // Instant black, position camera inside, then fade in
+  var bo=document.getElementById('vault-blackout');
   bo.style.transition='none';
   bo.style.opacity='1';
-  requestAnimationFrame(function(){
-    requestAnimationFrame(function(){
-      bo.style.transition='opacity 1s';
-      bo.style.opacity='0';
-    });
-  });
+  bo.style.pointerEvents='none';
+  bo.style.zIndex='60';
   // Camera starts at center, facing ACTIONS wall (north)
   vaultCam.position.set(0,VR_PAN_HEIGHT,VR_PAN_RADIUS);
   vaultCam.lookAt(0,VR_PAN_HEIGHT,-VR_D/2);
+  // Fade in after 2 frames (vault scene has rendered)
+  requestAnimationFrame(function(){requestAnimationFrame(function(){
+    bo.style.transition='opacity 1s';
+    bo.style.opacity='0';
+  })});
 };
 
 var _vaultExitId=0;
