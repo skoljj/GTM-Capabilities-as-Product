@@ -622,17 +622,13 @@ window.goToView=function(idx){
   productBelowAnim=false;
   idleZooming=false;
   resetIdle();
-  // Individuals view → enter vault room (instant blackout, no exterior visible)
+  // Individuals view → enter vault room directly
   if(idx===2){
     isTransitioning=false;
-    // Force-reset vault state so re-entry always works
+    // Force-reset so re-entry always works, then enter immediately
     vaultActive=false;
     vaultPhase='off';
-    // Don't move main camera — go straight to blackout + vault
-    const bo=document.getElementById('vault-blackout');
-    bo.style.transition='opacity 0.1s';
-    bo.classList.add('active');
-    setTimeout(function(){enterVaultRoom()},120);
+    enterVaultRoom();
   } else {
     targetView={targetY:v.targetY,r:v.r,phi:v.phi,theta:v.theta};
     isTransitioning=true;
@@ -1390,14 +1386,16 @@ window.enterVaultRoom=function(){
   vaultActive=true;
   vaultPhase='touring';
   vaultTimer=0;
-  // Blackout may already be active (from goToView). Reveal after camera is inside.
+  // Quick blackout then reveal once vault camera is positioned inside
   const bo=document.getElementById('vault-blackout');
-  bo.style.transition='opacity 0.1s';
-  bo.classList.add('active');
-  setTimeout(function(){
-    bo.style.transition='opacity 0.8s';
-    bo.classList.remove('active');
-  },200);
+  bo.style.transition='none';
+  bo.style.opacity='1';
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      bo.style.transition='opacity 1s';
+      bo.style.opacity='0';
+    });
+  });
   // Camera starts at center, facing ACTIONS wall (north)
   vaultCam.position.set(0,VR_PAN_HEIGHT,VR_PAN_RADIUS);
   vaultCam.lookAt(0,VR_PAN_HEIGHT,-VR_D/2);
