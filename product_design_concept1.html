@@ -627,10 +627,13 @@ window.goToView=function(idx){
   // Individuals view → enter vault room (instant blackout, no exterior visible)
   if(idx===2){
     isTransitioning=false;
+    // Force-reset vault state so re-entry always works
+    vaultActive=false;
+    vaultPhase='off';
     const bo=document.getElementById('vault-blackout');
     bo.style.transition='opacity 0.1s';
     bo.classList.add('active');
-    setTimeout(function(){enterVaultRoom()},100);
+    setTimeout(function(){enterVaultRoom()},120);
   }
   document.getElementById('layer-name').textContent=v.name;
   document.getElementById('layer-name').style.color=v.color;
