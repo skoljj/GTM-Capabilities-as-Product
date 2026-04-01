@@ -569,8 +569,15 @@ function advanceBeat(){
 function interruptCinematic(){
   if(!cinematicMode)return;
   cinematicMode=false;cinematicPaused=false;storyboardComplete=true;
+  // If inside vault room during interrupt, exit cleanly
+  if(vaultActive){_vaultExitId++;vaultActive=false;vaultPhase='off';document.getElementById('vault-blackout').style.opacity='0'}
   window.hideVault&&hideVault();window.hideScoreboard&&hideScoreboard();
   showManualControls();
+  // Set currentView to closest match for current camera position
+  const camY=lookTarget.y;
+  if(camY>40)currentView=1; // Contributors
+  else if(camY>-30)currentView=3; // AI Product Layer
+  else currentView=4; // Agent Universe
 }
 function showManualControls(){
   // Hide cinematic controls, keep nav visible in manual mode
@@ -625,7 +632,8 @@ window.goToView=function(idx){
   // Individuals view → enter vault room directly
   if(idx===2){
     isTransitioning=false;
-    // Force-reset so re-entry always works, then enter immediately
+    // Cancel any pending exit, force-reset, then enter
+    _vaultExitId++;
     vaultActive=false;
     vaultPhase='off';
     enterVaultRoom();
@@ -1401,11 +1409,14 @@ window.enterVaultRoom=function(){
   vaultCam.lookAt(0,VR_PAN_HEIGHT,-VR_D/2);
 };
 
+var _vaultExitId=0;
 window.exitVaultRoom=function(){
   if(!vaultActive)return;
   vaultPhase='exiting';
+  var myId=++_vaultExitId;
   document.getElementById('vault-blackout').classList.add('active');
   setTimeout(function(){
+    if(_vaultExitId!==myId)return; // cancelled by re-entry
     vaultActive=false;
     vaultPhase='off';
     document.getElementById('vault-blackout').classList.remove('active');
