@@ -633,9 +633,7 @@ window.goToView=function(idx){
     _vaultExitId++;
     vaultActive=false;
     vaultPhase='off';
-    console.log('[VAULT] goToView(2): calling enterVaultRoom, vaultActive before=',vaultActive);
     enterVaultRoom();
-    console.log('[VAULT] goToView(2): after enterVaultRoom, vaultActive=',vaultActive,'vaultPhase=',vaultPhase);
   } else {
     targetView={targetY:v.targetY,r:v.r,phi:v.phi,theta:v.theta};
     isTransitioning=true;
@@ -695,7 +693,7 @@ window.addEventListener('keydown',e=>{
 
 // Zoom buttons — route to active camera (main or vault)
 const ZOOM_MIN_R=8,ZOOM_MAX_R=300;
-const VAULT_ZOOM_MIN=8,VAULT_ZOOM_MAX=40;
+const VAULT_ZOOM_MIN=8,VAULT_ZOOM_MAX=22;
 function activeZoom(delta){
   if(vaultActive){
     vaultSph.r=Math.max(VAULT_ZOOM_MIN,Math.min(VAULT_ZOOM_MAX,vaultSph.r+delta));
@@ -1380,20 +1378,27 @@ let vaultTimer=0;
 let vaultDragActive=false;
 let vaultPM={x:0,y:0};
 let vaultSph={theta:0,phi:0.8,r:20}; // for free-look orbit mode
+let vaultEntryTime=0; // timestamp to ignore momentum scroll after entry
 
 function vaultCamFromSph(){
-  vaultCam.position.x=VR_W*0.0+vaultSph.r*Math.sin(vaultSph.phi)*Math.sin(vaultSph.theta);
-  vaultCam.position.y=VR_H*0.4+vaultSph.r*Math.cos(vaultSph.phi);
-  vaultCam.position.z=VR_W*0.0+vaultSph.r*Math.sin(vaultSph.phi)*Math.cos(vaultSph.theta);
+  var x=vaultSph.r*Math.sin(vaultSph.phi)*Math.sin(vaultSph.theta);
+  var y=VR_H*0.4+vaultSph.r*Math.cos(vaultSph.phi);
+  var z=vaultSph.r*Math.sin(vaultSph.phi)*Math.cos(vaultSph.theta);
+  // Clamp inside room with margin so camera never exits
+  var m=3;
+  x=Math.max(-VR_W/2+m,Math.min(VR_W/2-m,x));
+  y=Math.max(m,Math.min(VR_H-m,y));
+  z=Math.max(-VR_D/2+m,Math.min(VR_D/2-m,z));
+  vaultCam.position.set(x,y,z);
   vaultCam.lookAt(0,VR_H*0.4,0);
 }
 
 window.enterVaultRoom=function(){
-  console.log('[VAULT] enterVaultRoom called, vaultActive=',vaultActive);
-  if(vaultActive){console.log('[VAULT] BLOCKED - vaultActive already true');return;}
+  if(vaultActive)return;
   vaultActive=true;
   vaultPhase='touring';
   vaultTimer=0;
+  vaultEntryTime=performance.now();
   // Instant black, position camera inside, then fade in
   var bo=document.getElementById('vault-blackout');
   bo.style.transition='none';
@@ -1450,13 +1455,15 @@ renderer.domElement.addEventListener('pointerup',function(){vaultDragActive=fals
 // Zoom in vault — works in touring or free (interrupts tour)
 renderer.domElement.addEventListener('wheel',function(e){
   if(!vaultActive)return;
+  // Ignore momentum scroll for 1.5s after vault entry to prevent tour interruption
+  if(performance.now()-vaultEntryTime<1500)return;
   if(vaultPhase==='touring'){
     vaultPhase='free';
     vaultSph.r=20;vaultSph.phi=0.8;vaultSph.theta=0;
   }
   if(vaultPhase!=='free')return;
   e.preventDefault();
-  vaultSph.r=Math.max(8,Math.min(35,vaultSph.r+e.deltaY*0.05));
+  vaultSph.r=Math.max(8,Math.min(22,vaultSph.r+e.deltaY*0.05));
   vaultCamFromSph();
 },{passive:false});
 
@@ -3292,7 +3299,6 @@ function animate(){
   // Knowledge Vault panel hover animation
   if(vaultGroup.visible){vaultGroup.children.forEach(m=>{m.position.y=m.userData.baseY+Math.sin(t*0.8+m.userData.phase)*0.3})}
   // ── VAULT ROOM (separate scene) ──
-  if(!vaultActive&&currentView===2){document.title='BUG: view=2 but vaultActive=false phase='+vaultPhase}
   if(vaultActive){
     // Animate wall contents
     vaultRoomGroup.children.forEach(child=>{
