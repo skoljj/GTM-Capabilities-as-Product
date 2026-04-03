@@ -650,8 +650,7 @@ window.goToView=function(idx){
   const sbCode=document.getElementById('sb-code');
   const sbMcp=document.getElementById('sb-mcp');
   if(idx===3){
-    sbApi.classList.add('visible');sbCode.classList.add('visible');sbMcp.classList.add('visible');
-    requestAnimationFrame(()=>stackSidebars());
+    setTimeout(function(){sbApi.classList.add('visible');sbCode.classList.add('visible');sbMcp.classList.add('visible');requestAnimationFrame(()=>stackSidebars())},1200);
   } else {
     sbApi.classList.remove('visible');sbCode.classList.remove('visible');sbMcp.classList.remove('visible');
   }
