@@ -186,7 +186,7 @@ canvas{position:fixed;top:0;left:0;z-index:0}
 </div>
 
 <div id="layer-hud">
-  <div id="layer-name" style="color:#00e5ff">FLYOVER</div>
+  <div id="layer-name" style="color:#00e5ff">ANIMATED TOUR</div>
   <div class="sub">Scroll or click dots to inspect each layer &middot; Drag to orbit 360&deg;</div>
   <!-- seg-timer moved to flyby-nav -->
 </div>
@@ -198,7 +198,7 @@ canvas{position:fixed;top:0;left:0;z-index:0}
   <div id="flyby-sections">
     <div class="fn-pip active" data-idx="0" onclick="goToView(0)">
       <svg viewBox="0 0 22 22" class="fn-ring"><circle class="fn-track" cx="11" cy="11" r="9"/><circle class="fn-fill" cx="11" cy="11" r="9"/></svg>
-      <span class="fn-label">Flyover</span>
+      <span class="fn-label">Tour</span>
       <span class="fn-seg-time"></span>
     </div>
     <div class="fn-pip" data-idx="1" onclick="goToView(1)">
@@ -208,22 +208,22 @@ canvas{position:fixed;top:0;left:0;z-index:0}
     </div>
     <div class="fn-pip sub" data-idx="2" onclick="goToView(2)">
       <svg viewBox="0 0 16 16" class="fn-ring"><circle class="fn-track" cx="8" cy="8" r="6.5"/><circle class="fn-fill" cx="8" cy="8" r="6.5"/></svg>
-      <span class="fn-label">&darr; Individuals</span>
+      <span class="fn-label">Individuals</span>
       <span class="fn-seg-time"></span>
     </div>
     <div class="fn-pip" data-idx="3" onclick="goToView(3)">
       <svg viewBox="0 0 22 22" class="fn-ring"><circle class="fn-track" cx="11" cy="11" r="9"/><circle class="fn-fill" cx="11" cy="11" r="9"/></svg>
-      <span class="fn-label">AI Product Layer</span>
+      <span class="fn-label">AI Product</span>
       <span class="fn-seg-time"></span>
     </div>
     <div class="fn-pip" data-idx="4" onclick="goToView(4)">
       <svg viewBox="0 0 22 22" class="fn-ring"><circle class="fn-track" cx="11" cy="11" r="9"/><circle class="fn-fill" cx="11" cy="11" r="9"/></svg>
-      <span class="fn-label">Agent Universe</span>
+      <span class="fn-label">Agents</span>
       <span class="fn-seg-time"></span>
     </div>
     <div class="fn-pip" data-idx="5" onclick="goToView(5)">
       <svg viewBox="0 0 22 22" class="fn-ring"><circle class="fn-track" cx="11" cy="11" r="9"/><circle class="fn-fill" cx="11" cy="11" r="9"/></svg>
-      <span class="fn-label">Scoreboard</span>
+      <span class="fn-label">Outcomes</span>
       <span class="fn-seg-time"></span>
     </div>
     <div class="fn-pip" data-idx="6" onclick="goToView(6)">
@@ -416,13 +416,13 @@ if(typeof THREE==='undefined'){document.getElementById('error-display').style.di
 // VIEW SYSTEM
 // ═══════════════════════════════════════════════
 const VIEWS=[
-  {name:'FLYOVER',color:'#88aacc',targetY:0,r:220,phi:1.05,theta:0.4},
-  {name:'CONTRIBUTORS',color:'#00e5ff',targetY:60,r:90,phi:0.15,theta:0.0},
-  {name:'\u21B3 INDIVIDUALS',color:'#818cf8',targetY:60,r:2,phi:0.8,theta:0.0,special:'vaultRoom'},
-  {name:'AI PRODUCT LAYER',color:'#c77dff',targetY:0,r:65,phi:0.85,theta:0.0},
+  {name:'ANIMATED TOUR',color:'#88aacc',targetY:0,r:220,phi:1.05,theta:0.4},
+  {name:'CONTRIBUTORS & TEAMS',color:'#00e5ff',targetY:60,r:90,phi:0.15,theta:0.0},
+  {name:'\u21B3 INDIVIDUAL ENVIRONMENTS',color:'#818cf8',targetY:60,r:2,phi:0.8,theta:0.0,special:'vaultRoom'},
+  {name:'AI PRODUCT',color:'#c77dff',targetY:0,r:65,phi:0.85,theta:0.0},
   {name:'AGENT UNIVERSE',color:'#f4a623',targetY:-65,r:80,phi:0.75,theta:0.6},
-  {name:'SCOREBOARD',color:'#34d399',targetY:0,r:160,phi:1.0,theta:0.0},
-  {name:'SUMMARY',color:'#88aacc',targetY:0,r:220,phi:1.05,theta:0.4},
+  {name:'OUTCOMES SCOREBOARD',color:'#34d399',targetY:0,r:160,phi:1.0,theta:0.0},
+  {name:'SYSTEM SUMMARY',color:'#88aacc',targetY:0,r:220,phi:1.05,theta:0.4},
 ];
 let currentView=0,targetView={...VIEWS[0]},isTransitioning=false;
 let autoRotating=false,autoRotateStartTime=0,autoRotateStartTheta=0;
@@ -542,16 +542,16 @@ function updateFlybyNav(){
   if(timerEl)timerEl.textContent=fmtTime(totalRemain);
 }
 const STORYBOARD_BEATS=[
-  {name:'FLYOVER',targetY:0,r:220,phi:1.05,theta:0.4,dur:3,autoRot:true,autoRotDur:0,holdTime:0},
-  {name:'CONTRIBUTORS',targetY:60,r:90,phi:0.15,theta:0.0,dur:2,autoRot:false,holdTime:0},
-  {name:'HORIZON FLYBY',targetY:60,r:65,phi:1.2,theta:0.0,dur:2,autoRot:true,autoRotDur:4,holdTime:0,onEnter:'showVault',onExit:'hideVault'},
-  {name:'\u21B3 INDIVIDUALS',targetY:60,r:2,phi:0.8,theta:0.0,dur:0.01,autoRot:false,holdTime:0,special:'vaultRoom',onEnter:'enterVaultRoom',onExit:'exitVaultRoom'},
-  {name:'AI PRODUCT LAYER',targetY:0,r:65,phi:0.85,theta:0.0,dur:4,autoRot:true,autoRotDur:5,holdTime:1,onEnter:'showSidebars',onExit:'hideSidebars'},
-  {name:'PRODUCT BELOW',targetY:0,r:50,phi:2.85,theta:0.5,dur:1.5,autoRot:false,holdTime:0.75},
-  {name:'AGENT OVERVIEW',targetY:-65,r:80,phi:0.75,theta:0.6,dur:4,autoRot:true,autoRotDur:5,holdTime:1},
-  {name:'DRONE FLYTHROUGH',targetY:-63,r:15,phi:1.45,theta:0.0,dur:2,autoRot:false,holdTime:0,special:'drone'},
-  {name:'SCOREBOARD',targetY:0,r:160,phi:1.35,theta:0.0,dur:3,autoRot:false,holdTime:0,special:'scoreboardDrill',onEnter:'showScoreboard',onExit:null},
-  {name:'SUMMARY',targetY:0,r:220,phi:1.05,theta:0.4,dur:5,autoRot:false,holdTime:0,onEnter:'showOutroCTA',onExit:null},
+  {name:'ANIMATED TOUR',targetY:0,r:220,phi:1.05,theta:0.4,dur:3,autoRot:true,autoRotDur:0,holdTime:0},
+  {name:'CONTRIBUTORS & TEAMS',targetY:60,r:90,phi:0.15,theta:0.0,dur:2,autoRot:false,holdTime:0},
+  {name:'CONTRIBUTORS & TEAMS',targetY:60,r:65,phi:1.2,theta:0.0,dur:2,autoRot:true,autoRotDur:4,holdTime:0,onEnter:'showVault',onExit:'hideVault'},
+  {name:'\u21B3 INDIVIDUAL ENVIRONMENTS',targetY:60,r:2,phi:0.8,theta:0.0,dur:0.01,autoRot:false,holdTime:0,special:'vaultRoom',onEnter:'enterVaultRoom',onExit:'exitVaultRoom'},
+  {name:'AI PRODUCT',targetY:0,r:65,phi:0.85,theta:0.0,dur:4,autoRot:true,autoRotDur:5,holdTime:1,onEnter:'showSidebars',onExit:'hideSidebars'},
+  {name:'AI PRODUCT',targetY:0,r:50,phi:2.85,theta:0.5,dur:1.5,autoRot:false,holdTime:0.75},
+  {name:'AGENT UNIVERSE',targetY:-65,r:80,phi:0.75,theta:0.6,dur:4,autoRot:true,autoRotDur:5,holdTime:1},
+  {name:'AGENT UNIVERSE',targetY:-63,r:15,phi:1.45,theta:0.0,dur:2,autoRot:false,holdTime:0,special:'drone'},
+  {name:'OUTCOMES SCOREBOARD',targetY:0,r:160,phi:1.35,theta:0.0,dur:3,autoRot:false,holdTime:0,special:'scoreboardDrill',onEnter:'showScoreboard',onExit:null},
+  {name:'SYSTEM SUMMARY',targetY:0,r:220,phi:1.05,theta:0.4,dur:5,autoRot:false,holdTime:0,onEnter:'showOutroCTA',onExit:null},
 ];
 function advanceBeat(){
   const prev=STORYBOARD_BEATS[currentBeat];
@@ -3161,11 +3161,14 @@ function animate(){
     if(lastInteractionTime<0)lastInteractionTime=t;
     if(lastInteractionTime===0)lastInteractionTime=t;
 
-    // Idle: AI Product Layer — after 60s of no interaction, gently sweep below the disc
+    // Idle: AI Product Layer — after 60s of no interaction, start a gentle orbit
+    // (matches the cinematic autorotate behavior instead of the vertical dive)
     if(currentView===3&&!isTransitioning&&!autoRotating&&!productBelowAnim&&!drag){
       const idleSec=t-lastInteractionTime;
       if(idleSec>60){
-        productBelowAnim=true;productBelowStart=t;
+        autoRotating=true;
+        autoRotateStartTime=t;
+        autoRotateStartTheta=sph.theta;
       }
     }
   }
