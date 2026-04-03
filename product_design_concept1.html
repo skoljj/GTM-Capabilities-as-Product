@@ -594,8 +594,7 @@ window.showSidebars=function(){
   const sbApi=document.getElementById('sb-api');
   const sbCode=document.getElementById('sb-code');
   const sbMcp=document.getElementById('sb-mcp');
-  sbApi.classList.add('visible');sbCode.classList.add('visible');sbMcp.classList.add('visible');
-  requestAnimationFrame(function(){stackSidebars()});
+  setTimeout(function(){sbApi.classList.add('visible');sbCode.classList.add('visible');sbMcp.classList.add('visible');requestAnimationFrame(function(){stackSidebars()})},1200);
 };
 window.hideSidebars=function(){
   document.getElementById('sb-api').classList.remove('visible');
