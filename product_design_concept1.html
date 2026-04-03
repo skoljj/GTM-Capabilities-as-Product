@@ -619,8 +619,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementB
 
 window.goToView=function(idx){
   if(cinematicMode)interruptCinematic();
-  // If leaving vault room, exit it first
-  if(vaultActive&&idx!==2)exitVaultRoom();
+  // If leaving vault room, exit it first and pre-position main camera
+  if(vaultActive&&idx!==2){
+    var dest=VIEWS[idx];
+    lookTarget.y=dest.targetY;sph.r=dest.r;sph.phi=dest.phi;sph.theta=dest.theta;camUp();
+    exitVaultRoom();
+  }
   currentView=idx;const v=VIEWS[idx];
   autoRotating=false;
   productBelowAnim=false;
@@ -3113,7 +3117,7 @@ function animate(){
     // Manual mode — ring fills handled by showManualControls
     // MANUAL MODE — existing transition + autorotate + productBelow + idle logic
     if(isTransitioning){
-      const ls=0.04;
+      const ls=0.03;
       lookTarget.y+=(targetView.targetY-lookTarget.y)*ls;
       sph.r+=(targetView.r-sph.r)*ls;
       if(!drag){sph.phi+=(targetView.phi-sph.phi)*ls*0.5;sph.theta+=(targetView.theta-sph.theta)*ls*0.3}
@@ -3139,8 +3143,6 @@ function animate(){
       camUp();
       if(progress>=1){
         autoRotating=false;sph.theta=autoRotateStartTheta;sph.phi=targetView.phi;camUp();
-        // Product Layer: begin sweep to below-view
-        if(currentView===1){productBelowAnim=true;productBelowStart=t}
       }
     }
 
@@ -3161,16 +3163,11 @@ function animate(){
     if(lastInteractionTime<0)lastInteractionTime=t;
     if(lastInteractionTime===0)lastInteractionTime=t;
 
-    // Idle zoom-out on System View (layer 4)
-    if(currentView===3&&!isTransitioning&&!autoRotating&&!drag){
+    // Idle: AI Product Layer — after 60s of no interaction, gently sweep below the disc
+    if(currentView===3&&!isTransitioning&&!autoRotating&&!productBelowAnim&&!drag){
       const idleSec=t-lastInteractionTime;
-      if(idleSec>IDLE_THRESHOLD&&sph.r<IDLE_ZOOM_MAX_R){
-        idleZooming=true;
-        sph.r+=IDLE_ZOOM_SPEED*(1+((sph.r-220)/200)); // accelerate gently as we pull back
-        // Very slow drift rotation so it feels alive
-        sph.theta+=0.0008;
-        sph.phi+=(1.1-sph.phi)*0.002; // ease toward a slightly higher vantage
-        camUp();
+      if(idleSec>60){
+        productBelowAnim=true;productBelowStart=t;
       }
     }
   }
